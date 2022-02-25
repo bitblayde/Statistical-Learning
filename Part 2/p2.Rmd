@@ -1,0 +1,1630 @@
+---
+title: "Hoja2_Pablo_Manresa_Nebot"
+
+subtitle: |
+          Aprendizaje estadístico (43455)
+
+           Curso 2021/2022
+
+author: "Pablo Manresa Nebot"
+date: "17 de diciembre de 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h3 style="color:red">
+Ejercicio 1: (6.6.1 ISL) página 282.
+</h3>
+
+1. We perform best subset, forward stepwise, and backward stepwise selection on a single data set. For each approach, we obtain p+1 models, containing 0,1,2,...,p predictors. Explain your answers:\
+\
+\
+(a) Which of the three models with k predictors has the smallest training RSS?
+
+<h4 style="color:blue">  Solución </h4>
+Para responder a esta pregunta, me gustaría apoyarme en la teoría de los diferentes métodos de selección.\
+\
+El método del mejor subconjunto posible, como su nombre indica forma todos los posibles subconjuntos de predictores, siendo en total $2^p$. Por tanto, se tienen que ajustar $2^p$ modelos, y de ellos, se elige el mejor candidato $M_k$, como aquel que contiene el menor RSS, o el mayor R² con k predictores. Finalmente, se selecciona el mejor candidato de entre $M_0,...,M_p$ usando validación cruzada, $C_p$, AIC, BIC, o $R²_{adj}$. Por otro lado, el método de selección hacia delante, parte del modelo nulo, y en cada iteración se le va agregando un nuevo predictor, hasta que todos hayan sido incluidos en el modelo. En cada paso, se añade al modelo, aquella variable explicativa, que tras añadirla, ha proporcionado el menor RSS o mayor R². En último lugar se elige aquel modelo de entre $M_0,...,M_p$ usando validación cruzada, $C_p$, AIC, BIC, o $R²_{adj}$. Con este método se ajustan un total de $1+\frac{p·(p+1)}{2}$ modelos. El último método es el de selección hacia atrás, el cual parte del modelo completo (con todos los predictores), y en cada iteración se elimina aquella variable explicativa cuya exclusión proporciona la menor dimisnución del ajuste global del modelo. Finalmente se selecciona el mejor candidato de entre $M_0,...,M_p$ usando validación cruzada, $C_p$, AIC, BIC, o $R²_{adj}$. El método de selección hacia atrás, al igual que el de selección hacia delante requiere ajustar $1+\frac{p·(p+1)}{2}$ modelos. Teniendo lo anterior en cuenta, el método del mejor subconjunto posible, al ajustar los $2^p$ modelos, frente al método de selección hacia delante/atrás que requiere ajustar $1+\frac{p·(p+1)}{2}$ modelos, proporcionaría un menor RSS en el conjunto de entrenamiento, ya que ajusta más modelos que los otros dos métodos, pudiendo explorar todas las ramificaciones, frente a los otros dos, que cogerían aquel predictor que mejore inmediatamente (voraz) el ajuste del modelo. Si bien es cierto, podría ocurrir en la práctica que los 3 métodos proporcionen un modelo con predictores similares. \
+
+\
+\
+\
+
+(b) Which of the three models with k predictors has the smallest test RSS? \
+
+<h4 style="color:blue">  Solución </h4>
+
+Hay que tener en cuenta que el método del mejor subconjunto posible ajusta un total de $2^p$ modelos, por tanto, presenta un espacio de búsqueda mayor a los otros dos vecinos, ya que estos procesan una búsqueda más restringida. Por todo lo anterior, el método de selección del mejor subconjuto posible, al ajustar muchos más modelos que el método de selección hacia delante, y hacia atrás, podría esperarse que presente un modelo con un $test_{RSS}$ inferior al de los otros métodos. Sin embargo, por azar (o casualidad), o por puro sobreajuste del método de selección de mejor subconjunto posible, los otros métodos podrían presentar un modelo con un $test_{RSS}$ inferior.
+\
+\
+\
+(c) True or False:
+
+i. The predictors in the k-variable model identified by forward stepwise are a subset of the predictors in the (k+1)-variable model identified by forward stepwise selection. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Esta es verdadera dado que es secuencial y añade un predictor al modelo anterior durante cada iteración (en concreto, aquel que mejore el ajuste del modelo). \
+
+\
+\
+
+ii. The predictors in the k-variable model identified by backward stepwise are a subset of the predictors in the (k+ 1)-variable model identified by backward stepwise selection.
+
+<h4 style="color:blue">  Solución </h4>
+
+Esta es verdadera dado que también es secuencial y elimina un predictor del modelo anterior durante cada iteración (en concreto, aquel que proporcione la menor disminución del ajuste global del modelo). Entendiendo que en el método de selección hacia atrás se parte del modelo con todos los predictores, es decir, k = p, ... ,1. Por ejemplo, para k = 5, el modelo con k predictores va contener un subconjunto de predictores del modelo k+1 (5+1=6). \
+
+\
+\
+
+iii. The predictors in the k-variable model identified by backward stepwise are a subset of the predictors in the (k+1)-variable model identified by forward stepwise selection. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Esto es falso, ya que, aunque proporcionan resultados muy parecidos, no implica que los predictores en el modelo de k variables identificado por selección progresiva hacia atrás sea un subset de los predictores del modelo de k+1 variables identificado por selección progresiva hacia delante. Si las variables son incorreladas, los métodos podrían seleccionar el mismo conjunto de variables. En cambio, en presencia de correlación los métodos pueden seleccionar distintos conjuntos de variables. \
+
+\
+\
+
+iv. The predictors in the k-variable model identified by forward stepwise are a subset of the predictors in the (k+1)-variable model identified by backward stepwise selection. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Esto es falso, ya que, aunque proporcionan resultados muy parecidos, no implica que los predictores en el modelo de k variables identificado por selección progresiva hacia delante sea un subset de los predictores del modelo de k+1 variables identificado por selección progresiva hacia atrás. Si las variables son incorreladas, los métodos podrían seleccionar el mismo conjunto de variables. En cambio, en presencia de correlación los métodos pueden seleccionar distintos conjuntos de variables. En esencia, es una respuesta similar al apartado iii.\
+
+\
+\
+
+v. The predictors in the k-variable model identified by best subset are a subset of the predictors in the (k+ 1)-variable model identified by best subset selection. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Esto es falso, dado que el modelo identificado con el método del mejor subconjunto posible, prueba en cada iteración k todos los posibles ajustes conteniendo exactamente k predictores. Por tanto, en el modelo de k+1 variables podría contener otros predictores totalmente diferentes.
+
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 2: (6.6.2 ISL) página 282, apartados (a) y (b).
+</h3>
+
+2. For parts (a) through (c), indicate which of i. through iv. is correct. Justify your answer. \
+
+(a) The lasso, relative to least squares, is:\
+\
+\
+
+i. More flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in variance.\
+
+<h4 style="color:blue">  Solución </h4>
+
+Esta es falsa, dado que Lasso, es menos flexible, ya que, para $\lambda = 0$ Lasso proporciona el ajuste de mínimos cuadrados. En cambio, cuanto mayor es $\lambda$ mayor será la contracción, y por tanto, menor la flexibilidad del modelo.\
+\
+\
+
+ii. More flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease in bias.\
+
+<h4 style="color:blue">  Solución </h4>
+
+Esta es falsa, por el mismo motivo que el anteriormente mencionado. \
+\
+\
+
+iii. Less flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease invariance.\
+
+<h4 style="color:blue">  Solución </h4>
+
+Esta es verdadera, ya que, es menos flexible a mayor valor de $\lambda$, puesto que mayor será la contracción y por consecuencia (y por definición), habrá una reducción en la varianza de las predicciones, a expensas de un ligero incremento en el bias (sesgo). La reducción en la varianza deberá compensar el pequeño incremento en el bias (sesgo). \
+\
+\
+
+iv. Less flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease in bias.\
+
+<h4 style="color:blue">  Solución </h4>
+
+Esta es falsa, ya que, la reducción en la varianza de las predicciones debe compensar el incremento en el bias (sesgo). \
+\
+\
+
+(b) Repeat (a) for ridge regression relative to least squares.\
+
+<h4 style="color:blue">  Solución </h4>
+
+El comportamiento de Ridge es similar al de Lasso, por tanto, la correcta sería la opción iii, por el mismo motivo que se mencionó anteriormente. Sin embargo, cabe puntualizar que Ridge, a diferencia de Lasso, no tiende a dejar a 0 los coeficientes, sino a valores muy pequeños. Salvo cuando $\lambda \to \infty$.
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 3: (6.6.3 ISL) página 283-284.
+</h3>
+
+3. Suppose we estimate the regression coefficients in a linear regressionmodel by minimizing
+
+\begin{align*}
+\sum_{i=1}^{n} (y_i - β_0 - \sum_{j=1}^{p}β_j x_{ij})² \text{ subject to } \sum_{j=1}^{p}|β_j| \le s
+\end{align*}
+
+for a particular value of s. For parts (a) through (e), indicate whicho f i. through v. is correct. Justify your answer.
+
+(a) As we increases from 0, the training RSS will:\
+
+i. Increase initially, and then eventually start decreasing in aninverted U shape.\
+ii. Decrease initially, and then eventually start increasing in a U shape.\
+iii. Steadily increase.\
+iv. Steadily decrease.\
+v. Remain constant.\
+
+<h4 style="color:blue">  Solución </h4>
+
+iv. Decrecerá continuamente, ya que, la restricción cada vez será menor, y por tanto, el modelo será más flexible, provocando que el RSS durante el entrenamiento disminuya.\
+\
+\
+
+(b) Repeat (a) for test RSS.\
+
+<h4 style="color:blue">  Solución </h4>
+ii. Cuanto mayor sea s, menor restricción habrá, por tanto, el RSS decrecerá inicialmente, y entonces empezará a crecer en forma de U a medida que la flexilidad se incremente.
+
+\
+\
+\
+
+(c) Repeat (a) for variance.\
+<h4 style="color:blue">  Solución </h4>
+iii. Cada vez se incrementará más ya que, a medida que el modelo es más flexible, se ajustará más a los datos de entrenamiento.
+
+\
+\
+\
+
+(d) Repeat (a) for (squared) bias.\
+<h4 style="color:blue">  Solución </h4>
+iv. A medida que el modelo es más flexible se producirá un decremento en el sesgo, puesto que la restricción será menor. En general, lasso producirá una reducción en la varianza a expensas de un pequeño incremento en el bias (sesgo). Por tanto, si s es lo suficientemente grande, lo anterior no se producirá.
+
+\
+\
+\
+
+(e) Repeat (a) for the irreducible error.\
+<h4 style="color:blue">  Solución </h4>
+v. El error irreducible es independiente del modelo utilizado, por lo que no depende del s escogido.
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 4: (6.6.4 ISL) página 260-261.
+</h3>
+
+4. Suppose we estimate the regression coefficients in a linear regression model by minimizing
+
+\begin{align*}
+\sum_{i=1}^{n} (y_i - β_0 - \sum_{j=1}^{p}β_j x_{ij})² + \lambda \sum_{j=1}^{p}β^{2}_{j}
+\end{align*}
+
+for a particular value of λ. For parts (a) through (e), indicate which of i. through v. is correct. Justify your answer.
+
+(a) As we increase $\lambda$ from 0, the training RSS will: \
+i. Increase initially, and then eventually start decreasing in aninverted U shape.\
+
+ii. Decrease initially, and then eventually start increasing in a U shape.\
+
+iii. Steadily increase. \
+iv. Steadily decrease.\
+v. Remain constant. \
+
+<h4 style="color:blue">  Solución </h4>
+iii. Cuanto mayor es el valor de $\lambda$ mayor restricción tendrá el modelo y por tanto será cada vez menos flexible, por consecuencia, el RSS durante el entrenamiento irá aumentando.
+
+\
+\
+\
+
+(b) Repeat (a) for test RSS.\
+<h4 style="color:blue">  Solución </h4>
+ii. Dado que, al aumentar el valor de $\lambda$, el modelo cada vez será menos flexible y por tanto, menos "complejo". El RSS para el test decrecerá inicialmente, pero a medida que va aumentando el valor de $\lambda$, el RSS empezará a incrementarse en forma de U.
+
+\
+\
+\
+
+(c) Repeat (a) for variance.\
+<h4 style="color:blue">  Solución </h4>
+iv. Como se mencionó anteriormente, a medida que el valor de $\lambda$ se incrementa, el modelo será cada vez menos flexible, y por tanto, cada vez se ajustará menos a los datos de entrenamiento. Esto llevaría a un decremento en la varianza.
+
+\
+\
+\
+
+(d) Repeat (a) for (squared) bias.\
+<h4 style="color:blue">  Solución </h4>
+iii. Al aumentar $\lambda$, el modelo sería cada vez menos flexible y por tanto menos "complejo", ya que se produce una mayor contracción de los coeficientes, lo cual llevaría a un incremento del bias (sesgo).
+
+\
+\
+\
+
+(e) Repeat (a) for the irreducible error.\
+<h4 style="color:blue">  Solución </h4>
+v. Al igual que en el 3 (e) el error irreducible permanecería constante puesto que es independiente del modelo elegido, y por consiguiente no depende del valor de $\lambda$.
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 5: (6.6.6 ISL) página 285.
+</h3>
+
+6. We will now explore (6.12) and (6.13) further.\
+
+(a) Consider (6.12) with p=1. For some choice of $y_1$ and $\lambda$ > 0, plot (6.12) as a function of $β_1$. Your plot should confirm that (6.12) is solved by (6.14).
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r fig.cap="Fig. 1: Gráfica de acuero a (6.12) y (6.14)."}
+y <- 7 # Valor de y1
+coefficiente <- seq(-20, 20, 0.5) # Coeficientes equiespaciados entre -20 y 20 con saltos de 0.5
+lambda = 10
+
+# (6.12) para un predictor p
+fit <- (y-coefficiente)^2 + lambda*coefficiente^2
+
+plot(coefficiente, fit, xlab="coeficientes", ylab="ridge")
+
+# (6.14) Estimación ridge
+coeficiente_estimacion <- y/(1+lambda)
+
+# Mínimo
+fit_estimacion <- (y-coeficiente_estimacion)^2 + lambda*coeficiente_estimacion^2
+
+points(coeficiente_estimacion, fit_estimacion, col="blue", lwd=4)
+```
+\
+Como puede comprobarse, (6.12), se puede resolver (minimizarse) mediante $\hat{β}^{R}_{j} = \frac{y_j}{(1+\lambda)}$ (6.14).
+
+\
+\
+\
+
+(b) Consider (6.13) with p= 1. For some choice of $y_1$ and $\lambda$ > 0, plot (6.13) as a function of $β_1$. Your plot should confirm that (6.13) is solved by (6.15).
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r fig.cap="Fig. 2: Gráfica de acuero a (6.13) y (6.15)."}
+y <- 4 # Valor de y1
+coefficiente <- seq(-20, 20, 0.5) # Coeficientes equiespaciados entre -20 y 20 con saltos de 0.5
+lambda = 3
+
+# (6.13) para un predictor p
+fit <- (y-coefficiente)^2 + lambda*abs(coefficiente)
+
+plot(coefficiente, fit, xlab="coeficientes", ylab="lasso")
+
+# (6.15) Estimación lasso para y > λ/2
+coeficiente_estimacion <- y-(lambda/2)
+
+# Mínimo
+fit_estimacion <- (y-coeficiente_estimacion)^2 + lambda*abs(coeficiente_estimacion)
+
+points(coeficiente_estimacion, fit_estimacion, col="blue", lwd=4)
+```
+\
+Como puede comprobarse que (6.13), se puede resolver (minimizarse) mediante $\hat{β}^{L}_{j} = y_j - \frac{\lambda}{2}$ dado que, $y_j > \frac{\lambda}{2}$ (6.15).\
+
+Análogamente:
+
+```{r fig.cap="Fig. 3: Gráfica de acuero a (6.13) y (6.15)."}
+y <- 2 # Valor de y1
+coefficiente <- seq(-20, 20, 0.2) # Coeficientes equiespaciados entre -20 y 20 con saltos de 0.5
+lambda = 10
+
+# (6.13) para un predictor p
+fit <- (y-coefficiente)^2 + lambda*abs(coefficiente)
+
+plot(coefficiente, fit, xlab="coeficientes", ylab="lasso")
+
+# (6.15) Estimación lasso para |y| <= λ/2
+coeficiente_estimacion <- 0
+
+# Mínimo
+fit_estimacion <- (y-coeficiente_estimacion)^2 + lambda*abs(coeficiente_estimacion)
+
+points(coeficiente_estimacion, fit_estimacion, col="blue", lwd=4)
+```
+\
+Se puede comprobar que (6.13), puede resolverse (minimizarse) mediante $\hat{β}^{L}_{j} = 0$ dado que, $|y_j| \le \frac{\lambda}{2}$ (6.15).
+
+Finalmente:
+
+```{r fig.cap="Fig. 4: Gráfica de acuero a (6.13) y (6.15)."}
+y <- -5 # Valor de y1
+coefficiente <- seq(-20, 20, 0.2) # Coeficientes equiespaciados entre -20 y 20 con saltos de 0.5
+lambda = 2
+
+# (6.13) para un predictor p
+fit <- (y-coefficiente)^2 + lambda*abs(coefficiente)
+
+plot(coefficiente, fit, xlab="coeficientes", ylab="lasso")
+
+# (6.15) Estimación lasso para y < -λ/2
+coeficiente_estimacion <- y+(lambda/2)
+
+# Mínimo
+fit_estimacion <- (y-coeficiente_estimacion)^2 + lambda*abs(coeficiente_estimacion)
+
+points(coeficiente_estimacion, fit_estimacion, col="blue", lwd=4)
+```
+\
+Como puede comprobarse que (6.13), se puede resolver (minimizarse) mediante $\hat{β}^{L}_{j} = y_j + \frac{\lambda}{2}$ dado que, $y_j < \frac{-\lambda}{2}$ (6.15).\
+
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 6.
+</h3>
+6.Este ejercicio consta de dos apartados
+
+**Apartado 1 (0.8 puntos).** Escribir una función en R que permita implementar el método del mejor subconjunto posible, la selección progresiva hacia adelante y hacia atrás utilizando como criterio de comparación de modelos, Cp (AIC), BIC, R2adj, el mínimo $MSE_{val}$ estimado por validación cruzada con la regla 1sd, y mínimo $MSE_{val}$ por data split con la regla 1sd.  Los parámetros de entrada de la función serán:
+
+- data:  Data frame para un problema de regresión
+- y.name nombre de la variable respuesta
+-nombre:  nombre del método (bestsubset, forward, bacward) a implementar
+
+- ntrain:  tamaño  del  conjunto  de  datos  de  entrenamiento  (el  número  de  observaciones  en data menos $n_{train}$ proporciona el tamaño del conjunto de datos de prueba)
+
+- rep; número de veces que hay que repetir el Data split.
+
+- K; número de iteraciones (folds) para la validación cruzada.
+
+La función tendrá como salida una lista con cinco elementos y una figura. Los elementos de la lista serán:
+
+1. El conjunto de datos de entrenamiento.
+2. El conjunto de datos de prueba.
+
+3.  Una  lista  (con  5  elementos)  que  contiene  los  coeficientes  estimados  del  modelo  seleccionado de acuerdo con los 5 criterios de comparación de modelos: AIC, BIC, R²adj, mínimo MSE valestimado por validación cruzada con la regla 1sd y mínimo $MSE_{val}$ estimado por data split con la regla 1sd.
+
+4.  Una matriz de tamaño 5×4.  Cada fila de la matriz corresponde al modelo seleccionado de  acuerdo  con  uno  de  los  5  criterios  de  comparación  de  modelos  (AIC, BIC, R²adj, mínimo $MSE_{val}$ estimado por validación cruzada y data split con la regla 1sd). Cada fila para el modelo en cuestión contiene:  (i) el error de entrenamiento; (ii) la estimación del error de generalización obtenido por validación cruzada; (iii) la estimación del error de generalización obtenido por data split; (iv) la estimación del error de generalización estimado a partir del conjunto de datos de prueba. Para calcular los elementos de lasprimeras tres columnas de la matriz se utiliza el conjunto de datos de entrenamiento.Para el cálculo de la cuarta columna se utiliza el conjunto de datos de prueba.
+
+5.  Una lista (con 5 elementos) que contiene las predicciones del modelo seleccionado deacuerdo  con  los  5  criterios  de  comparación  de  modelos  (AIC,BIC,R2adj, mínimo $MSE_{val}$ estimado por validación cruzada y data split) para los datos de prueba.
+
+La figura estaría compuesta por 6 gráficas que representan: el error de entrenamiento y el valorde los 5 criterios de comparación de modelos, (AIC,BIC,R2adj, mínimo $MSE_{val}$ estimado por validación cruzada y data split con la regla 1sd) en función del tamaño del modelo (como en las figuras 2, 5a, y 6 de la segunda práctica de ordenador del Tema 3)
+
+
+<h4 style="color:blue">  Solución </h4>
+
+Nota: Se usará como ejemplo el dataframe Diabetes.
+
+Primero se cargan las librerías necesarias:
+
+```{r message=FALSE}
+require("lars")
+require("leaps")
+require("dplyr")
+```
+
+Se usará un porcentaje de train del 75%, y de test el 25% restante.
+
+La función para preparar los datos, espera como input un dataframe, un tamaño de train, y una semilla. Proporciona como salida una lista donde el primer elemento es el dataset de train, y el segundo el de test.
+
+```{r}
+prepara.datos <- function(data, ntrain, seed=300){
+  set.seed(seed)
+  n <- nrow(data)
+  test <- sample(n, n-ntrain)
+  # Se dividen los datos entre train y test
+  dataset.train <- data[-test, ]
+  dataset.test <- data[test, ]
+  return(list(dataset.train, dataset.test))
+}
+```
+
+Durante el resto del ejercicio, se seguirá la misma praxis; a la hora de devolver una lista con los datasets, el primer objeto será el dataset de train, y el segundo el de test.
+
+En cuanto a los criterios $AIC$, $BIC$, y $R^²_{adj}$, se usa la siguiente función, que actúa de wrapper, al cual, se le pasa un dataframe (con los datos de entrenamiento), el nombre de la variable respuesta, y el método de selección. Debido a que la variable respuesta está incluida en las columnas del dataframe, nvmax será igual a el número de columnas del dataframe menos la columna de la variable respuesta.
+
+```{r}
+metodo.seleccion <- function(data, y.name, nombre){
+  ajuste.seleccion <- regsubsets(as.formula(paste(y.name, "~", ".")), data=data, method=nombre, nvmax = ncol(data)-1 )
+  return(ajuste.seleccion)
+}
+```
+
+Para el criterio de Data Split, se tiene la siguiente función:
+
+```{r}
+datasplit.criterio <- function(data, y.name, nombre, n.train, y.labels, rep=100, val.porcentaje = 0.66){
+  # Se genera el tamaño de validación
+  n.train2 <- round(val.porcentaje*n.train)
+  error.data.split.valid=matrix(NA, rep, ncol(data)-1)
+
+  for (j in 1:rep){
+    # Se crean los índices de entrenamiento y validación
+    index.train2=sample(seq(1, n.train), n.train2,replace=FALSE)
+    index.val=setdiff(seq(1, n.train), index.train2)
+
+    fm <- as.formula(paste(y.name, "~", "."))
+    # Se realiza el ajuste con los datos de entrenamiento
+    reg.train=regsubsets(fm, data=data[index.train2,], nvmax=ncol(data)-1, method=nombre)
+
+    val.error.DataSplit=rep(NA, ncol(data)-1)
+    n.models=ncol(data)-1
+
+    for ( i in 1:n.models){
+      #Se calcula el error con los datos de validación
+      val.error.DataSplit[i]=mean((y.labels[index.val]-predict(reg.train, data[index.val,],id=i, y.name=y.name))^2)
+    }
+    error.data.split.valid[j,]=val.error.DataSplit
+  }
+  return(error.data.split.valid)
+}
+```
+
+La cual recibe como entrada un dataframe (datos de entrenamiento), el nombre de la variable respuesta, el método de selección, un tamaño de train, las etiquetas del conjunto de entrenamiento, un número de repeticiones, y el porcentaje de los datos de validación. Produce como salida la matriz de errores con el propio método.
+
+Para plotear los resultados del data split:
+
+```{r}
+plot.datasplit <- function(error.data.split.valid, n.models, train.data, nombre.metodo, y.name){
+  # Se calculan las medias de los errores de validación
+  error.medio.valid.datasplit=apply(error.data.split.valid, 2, mean)
+  # Se calcula el mínimo de las medias de los errores de validación
+  minimo.error.medio.ds=which.min(apply(error.data.split.valid, 2, mean))
+  # Se calculan las desviaciones típicas de los errores de validación
+  error.sd.valid.datasplit=apply(error.data.split.valid,2,sd)
+
+  # Se plotean las medias de los errores de validación
+  plot(error.medio.valid.datasplit, ann=FALSE,cex.lab=1.5,type="b",pch=19,lwd=2,ylim=c(2000, 5000))
+  mtext(side = 1, text = "Número de variables", line = 3,cex=1.5)
+  mtext(side = 2, text =expression("MSE"[val]*"(Data Split)"), line = 2,cex=1.5)
+  for (i in 1:n.models){
+    points(rep(i,2),c(error.medio.valid.datasplit[i]-error.sd.valid.datasplit[i],
+                      error.medio.valid.datasplit[i]+error.sd.valid.datasplit[i]),
+           pch=19,col="black",type="l")
+  }
+
+  points(minimo.error.medio.ds,error.medio.valid.datasplit[minimo.error.medio.ds],pch=19,col="red" )
+  # Se genera el índice del mejor candidato de acuerdo a la regla 1sd
+  index.1sd.DS=min(seq(1,n.models)[between(error.medio.valid.datasplit,
+                                    error.medio.valid.datasplit[minimo.error.medio.ds]-error.sd.valid.datasplit[minimo.error.medio.ds],
+                                    error.medio.valid.datasplit[minimo.error.medio.ds]+error.sd.valid.datasplit[minimo.error.medio.ds])
+                                   ])
+  # Se pinta de color verde el candidato
+  points(index.1sd.DS, error.medio.valid.datasplit[index.1sd.DS], type="p",col="green", cex=1.8,lwd=2)
+  legend("topright", c(expression("Modelo óptimo, min. MSE"[val]), "Modelo óptimo, regla 1Sd"), pch=19, col=c("red","green"))
+
+  return(list(index.1sd.DS, error.medio.valid.datasplit))
+}
+```
+
+Para la validación cruzada, se crea la siguiente función, la cual, recibe como parámetros el dataset de entrenamiento, el nombre de la variable respuesta, las etiquetas del conjunto de entrenamiento, el método de selección y el total de particiones (k-folds).
+
+```{r}
+validacion.cruzada.criterio <- function(data, y.name, y.labels, nombre, k=10){
+  set.seed=12
+  # Se generan las k particiones
+  n.models = ncol(data)-1
+  folds=sample(rep(1:k,length=nrow(data)))
+  cv.MSE=matrix(NA,k,n.models)
+  
+  fm <- as.formula(paste(y.name, "~", "."))
+  for ( k in 1:k){
+    # Se realiza el ajuste con las n-1 particiones
+    reg.temp=regsubsets(fm, data=data[folds!=k,], nvmax=ncol(data)-1, method=nombre)  ##############
+    
+    for (i in 1:n.models){
+      # Se evalúa el modelo con la partición k
+      pred=predict(reg.temp, data[folds==k,], id=i, y.name=y.name)
+      cv.MSE[k,i]=mean((y.labels[folds==k]-pred)^2)
+    }
+  }
+  
+  return(cv.MSE)
+}
+```
+
+Finalmente se obtiene como salida de la función, el $CV_{MSE_{val}}$ asociado a las diferentes particiones. A continuación se implementó la siguiente función para mostrar por pantalla el gráfico asociado al MSE anteriormentente mencionado para cada partición, y se mostrarán los candidatos con MSE mínimo y el de la regla 1sd.
+
+```{r}
+plot.vc <- function(cv.MSE, n.models){
+  # Se calculan las medias del MSE de la validación cruzada
+  cv.MSE.models=apply(cv.MSE,2,mean)
+  # Se calculan las desviaciones típicas del MSE de la validación cruzada
+  cv.MSE.models.sd=apply(cv.MSE,2,sd)
+  best.cv=which.min(cv.MSE.models)
+  
+  plot(cv.MSE.models, ann=FALSE,cex.lab=1.5,type="b",pch=19,ylim=c(2000,5000),lwd=2)
+  mtext(side = 1, text = "Número de variables", line = 3,cex=1.5)
+  mtext(side = 2, text =expression("MSE"[val]*"(CV"[10]*")"), line = 2,cex=1.5)
+  points(best.cv,cv.MSE.models[best.cv],pch=19,col="red" )
+  
+  # Se calcula el índice del mejor candidato de acuerdo a la regla 1sd para la validación cruzada
+  index.1sd=min(seq(1,n.models)[between(cv.MSE.models,
+                                    cv.MSE.models[which.min(cv.MSE.models)]-cv.MSE.models.sd[which.min(cv.MSE.models)],
+                                    cv.MSE.models[which.min(cv.MSE.models)]+cv.MSE.models.sd[which.min(cv.MSE.models)])
+                                ])
+  
+  points(index.1sd,cv.MSE.models[index.1sd],type="p",col="green",cex=1.8,lwd=2)
+  
+  for ( i in 1:n.models){
+    points(rep(i,2),c(cv.MSE.models[i]-cv.MSE.models.sd[i],
+                      cv.MSE.models[i]+cv.MSE.models.sd[i]),type="l")
+  }
+  legend("topright", c(expression("Modelo óptimo, min. MSE"[val]), "Modelo óptimo, regla 1Sd"), pch=19, col=c("red","green"),cex=1.3)
+  
+  return(list(index.1sd, cv.MSE.models))
+}
+```
+
+Para realizar las predicciones de los modelos de selección se necesita implementar el método que se presenta a continuación. Además, para poder modularizar correctamente, se ha de pasar el nombre de la variable respuesta como parámetro, y crear la fórmula dentro de la propia función.
+
+```{r}
+predict.regsubsets=function(object,newdata,id,y.name,...){
+  # Se crea la fórmula a partir del nombre de la variable respuesta introducida por parámetro
+  form <- as.formula(paste(y.name, "~", "."))
+  mat=model.matrix(form, newdata)
+  coefi=coef(object,id=id)
+  pred=mat[,names(coefi)]%*%coefi
+  return(pred)
+}
+```
+
+Se ha creado el siguiente wrapper para calcular las predicciones:
+
+```{r}
+calcula.predicciones <- function(ajuste, datos, id, y.name){
+  return(predict(ajuste, datos, id, y.name))
+}
+```
+
+También se ha creado la siguiente función para poder realizar los gráficos de acuerdo a los criterios $BIC$, $AIC$, $R^²_{adj}$ y el error de entrenamiento.
+
+```{r}
+plot.criterios.simples <- function(sumario.ajuste, best.CP, best.bic, best.adjr2, n){
+  # Se muestra el error de entrenamiento en función del número de variables
+  plot(sumario.ajuste$rss/n,ann=FALSE,type="b",cex.lab=1.5,lwd=2)
+  mtext(side = 1, text = "Número de variables", line = 3,cex=1.5)
+  mtext(side = 2, text = expression("Err"[train]), line = 2,cex=1.5)
+  
+  # Se muestra el valor del criterio CP (AIC)
+  plot(sumario.ajuste$cp,ann=FALSE,type="b",cex.lab=1.5,lwd=2)
+  mtext(side = 1, text = "Número de variables", line = 3,cex=1.5)
+  mtext(side = 2, text =expression("C"[p]), line = 2,cex=1.5)
+  points(best.CP,sumario.ajuste$cp[best.CP],pch=19,col="red" )
+  
+  # Se muestra el valor del criterio BIC
+  plot(sumario.ajuste$bic,ann=FALSE,type="b",cex.lab=1.5,lwd=2)
+  mtext(side = 1, text = "Número de variables", line = 3,cex=1.5)
+  mtext(side = 2, text ="BIC", line = 2,cex=1.5)
+  points(best.bic,sumario.ajuste$bic[best.bic],pch=19,col="red" )
+  
+  # Se muestra el valor del criterio R²adj
+  plot(sumario.ajuste$adjr2,ann=FALSE,type="b",cex.lab=1.5,lwd=2)
+  mtext(side = 1, text = "Número de variables", line = 3,cex=1.5)
+  mtext(side = 2, text =expression(paste("R"^"2")[adj]), line = 2,cex=1.5)
+  points(best.adjr2,sumario.ajuste$adjr2[best.adjr2],pch=19,col="red" )
+}
+```
+
+Aquí finalmente la función demandada por el enunciado, la cual recibe como argumento:
+
+1) Un dataframe compuesto por los datos de entrenamiento.
+2) El nombre de la variable y.
+3) El nombre del método de selección a implementar.
+4) El número de repeticiones en data split.
+5) El número de k-particiones (folds).
+
+Se realizará un filtrado inicial, ya que el enunciado del ejercicio 6, menciona la posibilidad de que en lugar de llamarse *exhaustive* se llame bestsubset, por tanto, si se introduce el argumento bestsubset, utilizará el método *exhaustive.* Otra consideración importante, es que los errores se han nombrado de la siguiente forma:
+
+1)  Error tipo I: Error de entrenamiento.
+2)  Error tipo II: Estimación del error de generalización obtenido por validación cruzada.
+3)  Error tipo III: Estimación del error de generalización obtenido por data split.
+4)  Error tipo IV: Estimación del error de generalizacción estimado a partir del conjunto de datos de prueba.
+
+El motivo por el que se han hecho así, es para poder mostrarlo en la tabla de forma visualmente atractiva, dado que los nombres eran demasiado largos e iba a quedar la tabla descompensada.
+
+```{r}
+ejercicio6.fn <- function(data, y.name, nombre, ntrain, rep, k){
+  # Filtrado inicial con el nombre del método de selección
+  if(nombre=="bestsubset" | nombre == "exhaustive"){
+    metodo="exhaustive"
+  } else if(nombre == "forward"){
+    metodo="forward"
+  } else if(nombre == "backward"){
+    metodo="backward"
+  } else{
+    stop("nombre de método incorrecto")
+  }
+  
+  n.train <- round(ntrain*nrow(data))
+  
+  # datasets[[1]] <- train y datasets[[2]] <- test
+  datasets <- prepara.datos(data, n.train) 
+  
+  # BIC, R²adj, CP.
+  ajuste.criterios.simples <- metodo.seleccion(datasets[[1]], y.name=y.name, nombre=metodo)
+  sumario.ajuste.criterios.simples <- summary(ajuste.criterios.simples)
+  
+  # Se obtienen los índices el mejor CP, BIC y R²adj
+  best.CP=which.min(sumario.ajuste.criterios.simples$cp)
+  best.bic=which.min(sumario.ajuste.criterios.simples$bic)
+  best.adjr2=which.max(sumario.ajuste.criterios.simples$adjr2)
+  
+  # Se espera que la variable respuesta esté en la primera columna
+  y.labels = as.vector(t(datasets[[1]][1]))
+  # Errores con data split
+  errores.data.split <- datasplit.criterio(datasets[[1]], y.name=y.name, nombre=metodo, y.labels=y.labels, n.train=n.train, rep=rep, val.porcentaje = 0.66)
+  
+  # Cross-validation
+  cv.MSE <- validacion.cruzada.criterio(datasets[[1]], y.name=y.name, y.labels=y.labels, nombre=metodo, k=k)
+  
+  # Para mostrar los 6 gráficos mencionados por el ejercicio
+  par(mfrow=c(3,2))
+  plot.criterios.simples(sumario.ajuste.criterios.simples, best.CP, best.bic, best.adjr2, nrow(data))
+  data.split.resultados <- plot.datasplit(errores.data.split, n.models=ncol(datasets[[1]])-1, train.data=datasets[[1]], nombre.metodo=metodo, y.name=y.name)
+  validacion.cruzada.resultados <- plot.vc(cv.MSE=cv.MSE, n.models=ncol(datasets[[1]])-1)
+  
+  # Índice del mejor de acuerdo a la regla 1sd para el criterio de data split
+  index.1sd.DS <- data.split.resultados[[1]]
+  val.error.DataSplit.mean <- data.split.resultados[[2]]
+  
+  # Índice del mejor de acuerdo a la regla 1sd para el criterio de validación cruzada
+  index.1sd <- validacion.cruzada.resultados[[1]]
+  cv.MSE.models <- validacion.cruzada.resultados[[2]]
+
+  # Lista de coeficientes
+  lista.coeficientes <- list(coef(ajuste.criterios.simples, id=best.adjr2),
+                             coef(ajuste.criterios.simples, id=best.CP), 
+                             coef(ajuste.criterios.simples, id=best.bic),
+                             coef(ajuste.criterios.simples, id=index.1sd.DS), 
+                             coef(ajuste.criterios.simples, id=index.1sd))
+
+  ###### Cálculo de errores.
+  
+  tabla.errores <- matrix(nrow=5, ncol=4)
+  colnames(tabla.errores) <- c("Error tipo I", "Error tipo II", "Error tipo III", "Error tipo IV")
+  rownames(tabla.errores) <- c("CP", "BIC", "ADJR²", "Validación cruzada", "Data Split")
+  
+  # I. ERROR DE ENTRENAMIENTO
+  Err.train.cp = mean( (datasets[[1]]$prog - predict(ajuste.criterios.simples, datasets[[1]], id=best.CP, y.name=y.name ))^2)
+  Err.train.bic = mean( (datasets[[1]]$prog - predict(ajuste.criterios.simples, datasets[[1]], id=best.bic, y.name=y.name ))^2)
+  Err.train.adjr2 = mean( (datasets[[1]]$prog - predict(ajuste.criterios.simples, datasets[[1]], id=best.adjr2, y.name=y.name ))^2)
+  Err.train.data.split = mean( (datasets[[1]]$prog - predict(ajuste.criterios.simples, datasets[[1]], id=index.1sd.DS, y.name=y.name ))^2)
+  Err.train.validacion.cruzada = mean( (datasets[[1]]$prog - predict(ajuste.criterios.simples, datasets[[1]], id=index.1sd, y.name=y.name ))^2)
+  
+  # Se guardan los resultados en la tabla
+  tabla.errores[,1] <- c(Err.train.cp, Err.train.bic, Err.train.adjr2, Err.train.data.split, Err.train.validacion.cruzada) 
+  
+  ###### II. ERROR POR VALIDACIÓN CRUZADA
+  Err.vc.cp = cv.MSE.models[best.CP]
+  Err.vc.bic = cv.MSE.models[best.bic]
+  Err.vc.adjr2 = cv.MSE.models[best.adjr2]
+  Err.vc.1sd = cv.MSE.models[index.1sd]
+  Err.vc.ds.1sd = cv.MSE.models[index.1sd.DS]
+  
+  # Se guardan los resultados en la tabla
+  tabla.errores[,2] <- c(Err.vc.cp, Err.vc.bic, Err.vc.adjr2, Err.vc.1sd, Err.vc.ds.1sd)
+  
+  ###### III. ERROR POR DATA SPLIT
+  Err.ds.cp = val.error.DataSplit.mean[best.CP]
+  Err.ds.bic = val.error.DataSplit.mean[best.bic]
+  Err.ds.adjr2 = val.error.DataSplit.mean[best.adjr2]
+  Err.ds.vc.1sd = val.error.DataSplit.mean[index.1sd]
+  Err.ds.1sd = val.error.DataSplit.mean[index.1sd.DS]
+  
+  # Se guardan los resultados en la tabla
+  tabla.errores[,3] <- c(Err.ds.cp, Err.ds.bic, Err.ds.adjr2, Err.ds.vc.1sd, Err.ds.1sd)
+  
+  ###### IV. ERROR DE TEST
+  Err.test.cp = mean( (datasets[[2]]$prog - predict(ajuste.criterios.simples, datasets[[2]], id=best.CP, y.name=y.name ))^2)
+  Err.test.bic = mean( (datasets[[2]]$prog - predict(ajuste.criterios.simples, datasets[[2]], id=best.bic, y.name=y.name ))^2)
+  Err.test.adjr2 = mean( (datasets[[2]]$prog - predict(ajuste.criterios.simples, datasets[[2]], id=best.adjr2, y.name=y.name ))^2)
+  Err.test.data.split = mean( (datasets[[2]]$prog - predict(ajuste.criterios.simples, datasets[[2]], id=index.1sd.DS, y.name=y.name ))^2)
+  Err.test.validacion.cruzada = mean( (datasets[[2]]$prog - predict(ajuste.criterios.simples, datasets[[2]], id=index.1sd, y.name=y.name ))^2)
+  
+  # Se guardan los resultados en la tabla
+  tabla.errores[,4] <- c(Err.test.cp, Err.test.bic, Err.test.adjr2, Err.test.data.split, Err.test.validacion.cruzada) 
+  
+  #### PREDICCIONES
+  # Aquí se calculan las predicciones, usando el conjunto de test -> datasets[[2]]
+  pred.best.cp <- calcula.predicciones(ajuste.criterios.simples, datasets[[2]], id=best.CP, y.name=y.name)
+  pred.best.bic <- calcula.predicciones(ajuste.criterios.simples, datasets[[2]], id=best.bic, y.name=y.name)
+  pred.best.adjr2 <- calcula.predicciones(ajuste.criterios.simples, datasets[[2]], id=best.adjr2, y.name=y.name)
+  pred.best.1sd.DS <- calcula.predicciones(ajuste.criterios.simples, datasets[[2]], id=index.1sd.DS, y.name=y.name)
+  pred.best.1sd.VC <- calcula.predicciones(ajuste.criterios.simples, datasets[[2]], id=index.1sd, y.name=y.name)
+  
+  predicciones <- list(pred.best.adjr2, pred.best.cp, pred.best.bic, pred.best.1sd.DS, pred.best.1sd.VC)
+  
+  names(predicciones) <- c("adjR²", "Cp", "BIC", "Data Split", "Validación Cruzada")
+  
+  return(list(datasets[[1]], datasets[[2]], lista.coeficientes, tabla.errores, predicciones))
+}
+```
+
+La función produce como salida exactamente lo que indica el enunciado. Como anteriormente se mencionó, *datasets[[1]]* contiene los datos de entrenamiento, mientras que *datasets[[2]]* contiene los de test. Una consideración importante, es que a la hora de introducir la lista con los datasets, la primera columna de cada dataset debe ser la variable respuesta. Esto es así por diseño, ya que el objetivo de esta práctica no es construir una navaja suiza o una librería.
+
+Como bien puede observarse, la función es demasiado larga, sin embargo, lo requería para poder cumplir con los objetivos del ejercicio, el cual, era bastante largo a su vez El motivo por el cual no se ha modularizado más, es para no tener infinidad de funciones y acabar perdiendo el hilo de qué hace cada cosa.
+
+En la siguiente celda de código, se ejecutará la función anterior, y se mostrarán por pantalla las tablas de coeficientes y errores, junto con las 6 gráficas.
+
+```{r,fig.width=10,fig.height=8,fig.cap="Fig. 5: Mejor modelo de acuerdo a los criterios $C_{p}$ ($AIC$), $BIC$, $R^{2}_{adj}$ mínimo $MSE_{val}$ estimado por validación cruzada y data split"}
+apartado1 <- function(){
+  train.porcentaje <- 0.75
+  # Se usa el dataset diabetes de ejemplo
+  data(diabetes)
+  Diabetes=data.frame(cbind(prog=diabetes$y, diabetes$x))
+  ret.apartado1 <- ejercicio6.fn(data=Diabetes, y.name="prog", ntrain=train.porcentaje, nombre="exhaustive", rep=100, k=10)
+
+  return(list(ret.apartado1[[3]], ret.apartado1[[4]], ret.apartado1[[5]]))
+}
+out.ej1 <- apartado1()
+```
+
+
+El error de entrenamiento, disminuye a medida que el número de variables incluidas en el modelo se incrementa, ya que podría haber mayor ajuste a los datos. En cuanto al criterio $R^2_{adj}$ el mejor modelo sería el compuesto por 8 variables, ya que es el que mayor $R^2_{adj}$ presenta, frente al criterio $C_p (AIC)$, que propone un modelo compuesto por 7 variables o predictores, ya que es el que menor $C_p (AIC)$ presenta, seguido del criterio $BIC$ que propone que el mejor modelo es el compuesto por 5 variables. En cuanto a los criterios Data split y validación cruzada, aquellos elegidos mediante la regla de 1sd, sería el modelo de 3 predictores y 2 predictores respectivamente.
+
+A continuación se mostrarán las tablas para los coeficientes.
+
+```{r}
+knitr::kable(out.ej1[[1]][1], caption="Tabla 1: Coeficientes para el modelo con el criterio R²adj")
+knitr::kable(out.ej1[[1]][2], caption="Tabla 2: Coeficientes para el modelo con el criterio CP (AIC)")
+knitr::kable(out.ej1[[1]][3], caption="Tabla 3: Coeficientes para el modelo con el criterio BIC")
+knitr::kable(out.ej1[[1]][4], caption="Tabla 4: coeficientes para el modelo con data split usando la regla 1Sd.")
+knitr::kable(out.ej1[[1]][5], caption="Tabla 5: coeficientes para el modelo de VC usando la regla 1Sd.")
+```
+
+El criterio de data split y validación cruzada seleccionan menos coeficientes que los otros criterios. Data split selecciona los coeficientes bmi, map y ltg. En cambio, el criterio de validación cruzada selecciona los coeficientes bmi y ltg.
+
+En cuanto a las tablas para los errores, se tiene:
+
+```{r}
+knitr::kable(out.ej1[[2]], caption="Tabla 6: Errores en función de cada uno de los criterios")
+```
+
+Como puede comprobarse visualmente, para el error de entrenamiento (error tipo I), el modelo que menor error presenta es el elegido mediante el criterio $R^2_{adj}$, seguido por el modelo según el criterio $C_p (AIC)$. Sin embargo, los que mayor error presentan son los modelos de acuerdo al criterio de validación cruzada y data split. En cuanto al error de tipo II, es decir, la estimación del error de generalización obtenido por validación cruzada, de nuevo, presentan un mayor error los modelos obtenidos a partir de los criterios de validación cruzada y data split, siendo el modelo del criterio $R^2_{adj}$ el que presenta el menor error, de entre los 5. En cuanto al error de tipo III, o sea, la estimación del error de generalización obtenida por data split, vuelven a ser los modelos proporcionados por los criterios validación cruzada y data split los que presentan un error mayor, frente al modelo proporcionado por el criterio $R^2_{adj}$ que proporciona, de nuevo, el menor error de entre los 5, seguido de muy cerca por el modelo proporcionado por el criterio $C_p (AIC)$. Finalmente, en cuanto al error de generalización estimado a partir del conjunto de datos de prueba (error tipo IV), los modelos proporcionados por los criterios de validación cruzada y data split son los que menor error proporcionan, a diferencia de los tipos de errores anteriores, en los que los dos modelos mencionados, eran los que presentaban un valor más alto. En este tipo de error, el tercer modelo que menor error proporciona es el modelo según el criterio $C_p (AIC)$, seguido del modelo según el criterio $R^2_{adj}$, y finalmente, el respectivo al modelo $BIC$. Lo anterior podría deberse a que los modelos proporcionados por los criterios $C_p (AIC)$, $R^2_{adj}$ y $BIC$ hacen una estimación mucho más optimista del error a la hora de elegir los modelos, frente a los modelos obtenidos por validación cruzada y data split, que proporcionan una estimación más pesismita del error durante la elección de modelos. 
+ 
+
+Finalmente, se obtienen las predicciones, que serán la entrada de la función del apartado 2.
+
+```{r}
+preds <- out.ej1[[3]]
+```
+\
+\
+\
+**Apartado 2. (0.2 puntos).** Escribir una función en R que genere una figura en la que secomparan las predicciones realizadas (para los datos de prueba) con los modelos seleccionados de acuerdo con los 4 criterios de comparación de modelos: AIC, BIC, mínimo $MSE_{val}$  estimado por validación cruzada con la regla 1sd y mínimoM SEvalestimado por data split con la regla 1sd.
+
+- El  parámetro  de  entrada  de  la  función  es  una  lista  (con  4  elementos)  que  contiene  las predicciones del modelo seleccionado de acuerdo con los 4 criterios de comparación demodelos (AIC,BIC, mínimo $MSE_{val}$ estimado por validación cruzada con la regla 1sd y mínimo $MSE_{val}$ estimado por data split con la regla 1sd) para los datos de prueba (no hay que tener en cuenta, en este caso, el criterio basado en elR2adj).
+
+- La  salida  de  la  función  es  una  figura  del  tipo  mostrado  en  la  figura  13  de  la  segunda práctica  de  ordenador  del  Tema  3  (PracticaO2tema3,  sección *Comparación  predicciones  utilizando  los  métodos  del  mejor  subconjunto  posible,  selección  progresiva  hacia adelante y hacia atrás, Ridge y LASSO*) con 6 gráficas (correspondientes a las 6 parejas que se  pueden  formar  con  los  4  modelos  seleccionados). Cada  una  de  las  6  gráfica scompara las predicciones de dos modelos.
+
+
+```{r,fig.width=10,fig.height=8,fig.cap="Fig. 6: Gráficas con la similitud en las predicciones"}
+apartado2 <- function(predicciones){
+  par(mfrow=c(3,2))
+  plot(predicciones[[1]], predicciones[[2]], xlab="Criterio Cp", ylab="Criterio BIC",main="",cex.lab=1.5)
+  abline(0,1)
+  plot(predicciones[[1]], predicciones[[3]], xlab="Criterio Cp", ylab="Validación cruzada",main="",cex.lab=1.5)
+  abline(0,1)
+  plot(predicciones[[1]], predicciones[[4]], xlab="Criterio Cp", ylab="Data Split",main="",cex.lab=1.5)
+  abline(0,1)
+  plot(predicciones[[2]], predicciones[[3]], xlab="Criterio BIC", ylab="Validación Cruzada",main="",cex.lab=1.5)
+  abline(0,1)
+  plot(predicciones[[2]], predicciones[[4]], xlab="Criterio BIC", ylab="Data Split",main="",cex.lab=1.5)
+  abline(0,1)
+  plot(predicciones[[3]], predicciones[[4]], xlab="Validación Cruzada", ylab="Data Split", main="",cex.lab=1.5)
+  abline(0,1)
+}
+apartado2(preds[c(2, 3, 4, 5)])
+```
+
+En cuanto a las comparaciones de las predicciones utilizando los diferentes criterios, puede observarse como hay cierto grado de similitud entre las predicciones mediante los criterios BIC y $C_p$, ya que se encuentran muy concentradas en torno a la recta, y parece que siguen una relación prácticamente lineal, dado que hay muy poca dispersión. En cuanto al criterio de validación cruzada y $C_p$ los puntos se encuentran muy dispersos en torno a la recta, no están tan concentrados como los del criterio BIC y $C_p$, evidenciando cierto grado de discrepancia. Análogamente, las predicciones del criterio $C_p$ y data split, todavía se encuentran más dispersas en torno a la recta que en la pareja anterior, mostrando una mayor discrepancia. En cuanto al criterio BIC y la validación cruzada, las predicciones se encuentran más concretadas en torno a la recta, que en las dos últimas parejas anteriores, y como tal, muestran una menor discrepancia. En cuanto a las dos últimas parejas, se encuentran aquellas formadas por las predicciones con el criterio data split y el cliterio BIC, cuyas predicciones se encuentran relativamentte dispersas en cuanto a la recta, y poco concentradas, señalando cierto grado de discrepancia, y la pareja formada por las predicciones del criterio data split y validación cruzada, presentando una dispersión en las predicciones en torno a la recta, inferior a la pareja anterior, y una concentración mayor. Las parejas de predicciones formadas con los modelos con el criterio BIC, y el criterio $C_p$ son las más concentradas y, por tanto, menos dispersas, seguidas por las parejas de predicciones de los criterios de validación cruzada y data split.
+
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 7: (6.6.8 ISL) página 285-286.
+</h3>
+
+(a) Use the rnorm() function to generate a predictor X of length n = 100, as well as a noise vector \epsilon of length n = 100.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+set.seed(12)
+X <- rnorm(n=100)
+eps <- rnorm(n=100)
+```
+
+(b) Generate a response vector Y of length n = 100 according to the model
+
+  $Y=β_0+β_1X+β_2X_2+β_3X_3+\epsilon$
+
+where $β_0$, $β_1$, $β_2$, and $β_3$ are constants of your choice.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+b0 <- 1.1
+b1 <- 2.3
+b2 <- 0.23
+b3 <- -0.7
+
+# Se genera la respuesta y
+y <- b0 + b1*X + b2*X^2 + b3*X^3 + eps
+
+y
+```
+
+(c) Use the regsubsets() function to perform best subset selection in order to choose the best model containing the predictors X, X2 ,..., X10. What is the best model obtained according to $C_{p}$, BIC, and adjusted R²? Show some plots to provide evidence for your answer, and report the coefficients of the best model obtained. Note you will need to use the data.frame() function to create a single data set containing both X and Y.
+
+```{r}
+library(leaps)
+dataset <- data.frame(x=X, y=y)
+
+# Se realizar el ajuste con los 10 predictores
+ajuste.7c <- regsubsets(y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)+I(x^9)+I(x^10), data = dataset, nvmax=10)
+
+ajuste.7c.summary <- summary(ajuste.7c)
+```
+
+```{r, fig.cap="Fig. 7: Gráficas con el valor de los criterios $C_{p}$ ($AIC$), $BIC$, $R^{2}_{adj}$ con el método de selección del mejor subconjunto posible"}
+par(mfrow=c(2, 2))
+
+plot(ajuste.7c.summary$adjr2, type="l", ylab="adjR²", xlab="predictores")
+points(which.max(ajuste.7c.summary$adjr2), ajuste.7c.summary$adjr2[which.max(ajuste.7c.summary$adjr2)], col="blue")
+
+plot(ajuste.7c.summary$bic, type="l", ylab="BIC", xlab="predictores")
+points(which.min(ajuste.7c.summary$bic), ajuste.7c.summary$bic[which.min(ajuste.7c.summary$bic)], col="blue")
+
+plot(ajuste.7c.summary$cp, type="l", ylab="C_p", xlab="predictores")
+points(which.min(ajuste.7c.summary$cp), ajuste.7c.summary$cp[which.min(ajuste.7c.summary$cp)], col="blue")
+```
+
+El mejor modelo de acuerdo a $C_p$, BIC y R² es el modelo con 3 predictores. \
+
+
+```{r}
+# Se calculan los valores de los criterios
+adjr2 <- ajuste.7c.summary$adjr2[which.max(ajuste.7c.summary$adjr2)]
+bic <- ajuste.7c.summary$bic[which.min(ajuste.7c.summary$bic)]
+cp <- ajuste.7c.summary$cp[which.min(ajuste.7c.summary$cp)]
+```
+
+El resultado tras los criterios $R^{2}_{adj}, BIC$ y $C_p$ es:
+```{r}
+# Se crea una tabla para almacenar los resultados
+resultados <- matrix(NA, nrow = 1, ncol=3)
+resultados[, 1] = adjr2
+resultados[, 2] = bic
+resultados[, 3] = cp
+colnames(resultados) <- c("AdjR²", "BIC", "Cp")
+rownames(resultados) <- "Resultado"
+
+knitr::kable(resultados, caption="Tabla 7: Valor de cada uno de los criterios con selección del mejor subconjunto posible")
+```
+
+
+Los coeficientes del mejor modelo obtenido son:
+
+```{r}
+knitr::kable(t(coef(ajuste.7c, which.min(ajuste.7c.summary$cp))), caption="Tabla 8: Coeficientes estimados: criterio $C_{p}$ ($AIC$)")
+```
+
+```{r,echo=FALSE}
+knitr::kable(t(coef(ajuste.7c, which.min(ajuste.7c.summary$bic))), caption="Tabla 9: Coeficientes estimados: criterio $BIC$")
+```
+
+```{r,echo=FALSE}
+knitr::kable(t(coef(ajuste.7c, which.max(ajuste.7c.summary$adjr2))), caption="Tabla 10: Coeficientes estimados: criterio $R^{2}_{adj}$")
+```
+
+(d) Repeat (c), using forward stepwise selection and also using backward stepwise selection. How does your answer compare to the results in (c)?
+
+Selección progresiva hacia delante
+
+```{r fig.cap="Fig. 8: Gráficas con el valor de los criterios $C_{p}$ ($AIC$), $BIC$, $R^{2}_{adj}$ con el método de selección hacia adelante"}
+dataset <- data.frame(x=X, y=y)
+
+# Se realiza el ajuste
+ajuste.7c.forward <- regsubsets(y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)+I(x^9)+I(x^10), data = dataset, nvmax=10,method="forward")
+
+# Se guarda el "sumario"
+ajuste.7c.forward.summary <- summary(ajuste.7c.forward)
+
+par(mfrow=c(2, 2))
+
+# Se crean los gráficos.
+
+plot(ajuste.7c.forward.summary$adjr2, type="l", ylab="adjR²", xlab="predictores")
+points(which.max(ajuste.7c.forward.summary$adjr2), ajuste.7c.forward.summary$adjr2[which.max(ajuste.7c.forward.summary$adjr2)])
+
+plot(ajuste.7c.forward.summary$bic, type="l", ylab="BIC", xlab="predictores")
+points(which.min(ajuste.7c.forward.summary$bic), ajuste.7c.forward.summary$bic[which.min(ajuste.7c.forward.summary$bic)])
+
+plot(ajuste.7c.forward.summary$cp, type="l", ylab="C_p", xlab="predictores")
+points(which.min(ajuste.7c.forward.summary$cp), ajuste.7c.forward.summary$cp[which.min(ajuste.7c.forward.summary$cp)])
+```
+\
+Con el método de selección hacia delante, el mejor modelo de acuerdo a $C_p$, BIC y R² es el modelo con 3 predictores.
+
+```{r}
+
+# Se calculan los valores de los criterios
+adjr2 <- ajuste.7c.forward.summary$adjr2[which.max(ajuste.7c.forward.summary$adjr2)]
+bic <- ajuste.7c.forward.summary$bic[which.min(ajuste.7c.forward.summary$bic)]
+cp <- ajuste.7c.forward.summary$cp[which.min(ajuste.7c.forward.summary$cp)]
+
+# Se crea la tabla para almacenar los valores
+resultados <- matrix(NA, nrow = 1, ncol=3)
+resultados[, 1] = adjr2
+resultados[, 2] = bic
+resultados[, 3] = cp
+colnames(resultados) <- c("AdjR²", "BIC", "Cp")
+rownames(resultados) <- "Resultado"
+
+knitr::kable(resultados, caption="Tabla 11: Valor de cada uno de los criterios con selección hacia delante.")
+```
+
+Los coeficientes del mejor modelo obtenido son:
+
+```{r}
+knitr::kable(t(coef(ajuste.7c.forward, which.min(ajuste.7c.forward.summary$cp))), caption="Tabla 12: Coeficientes estimados: criterio $C_{p}$ ($AIC$)")
+```
+
+```{r,echo=FALSE}
+knitr::kable(t(coef(ajuste.7c.forward, which.min(ajuste.7c.forward.summary$bic))), caption="Tabla 13: Coeficientes estimados: criterio $BIC$")
+```
+
+```{r,echo=FALSE}
+knitr::kable(t(coef(ajuste.7c.forward, which.max(ajuste.7c.forward.summary$adjr2))), caption="Tabla 14: Coeficientes estimados: criterio $R^{2}_{adj}$")
+```
+
+Selección progresiva hacia atrás:
+
+```{r fig.cap="Fig. 9: Gráficas con el valor de los criterios $C_{p}$ ($AIC$), $BIC$, $R^{2}_{adj}$ con el método de selección hacia atrás"}
+dataset <- data.frame(x=X, y=y)
+
+# Se realiza el ajuste
+ajuste.7c.backward <- regsubsets(y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)+I(x^9)+I(x^10), data = dataset, nvmax=10, method="backward")
+
+# Se guarda el "sumario"
+ajuste.7c.backward.summary <- summary(ajuste.7c.backward)
+
+# Se crean los gráficos.
+
+par(mfrow=c(2, 2))
+
+plot(ajuste.7c.backward.summary$adjr2, type="l", ylab="adjR²", xlab="predictores")
+points(which.max(ajuste.7c.backward.summary$adjr2), ajuste.7c.backward.summary$adjr2[which.max(ajuste.7c.backward.summary$adjr2)])
+
+plot(ajuste.7c.backward.summary$bic, type="l", ylab="BIC", xlab="predictores")
+points(which.min(ajuste.7c.backward.summary$bic), ajuste.7c.backward.summary$bic[which.min(ajuste.7c.backward.summary$bic)])
+
+plot(ajuste.7c.backward.summary$cp, type="l", ylab="C_p", xlab="predictores")
+points(which.min(ajuste.7c.backward.summary$cp), ajuste.7c.backward.summary$cp[which.min(ajuste.7c.backward.summary$cp)])
+```
+\
+Con el método de selección hacia atrás, el mejor modelo de acuerdo a $C_p$, BIC y R² es el modelo con 3 predictores.
+
+```{r}
+# Se calculan los valores de los criterios
+
+adjr2 <- ajuste.7c.backward.summary$adjr2[which.max(ajuste.7c.backward.summary$adjr2)]
+bic <- ajuste.7c.backward.summary$bic[which.min(ajuste.7c.backward.summary$bic)]
+cp <- ajuste.7c.backward.summary$cp[which.min(ajuste.7c.backward.summary$cp)]
+
+# Se crea la tabla para almacenar los valores
+resultados <- matrix(NA, nrow = 1, ncol=3)
+resultados[, 1] = adjr2
+resultados[, 2] = bic
+resultados[, 3] = cp
+colnames(resultados) <- c("AdjR²", "BIC", "Cp")
+rownames(resultados) <- "Resultado"
+
+knitr::kable(resultados, caption="Tabla 15: Valor de cada uno de los criterios con selección hacia atrás")
+```
+
+Los coeficientes del mejor modelo obtenido son:
+
+```{r}
+knitr::kable(t(coef(ajuste.7c.backward, which.min(ajuste.7c.backward.summary$cp))), caption="Tabla 16: Coeficientes estimados: criterio $C_{p}$ ($AIC$)")
+```
+
+```{r,echo=FALSE}
+knitr::kable(t(coef(ajuste.7c.backward, which.min(ajuste.7c.backward.summary$bic))), caption="Tabla 17: Coeficientes estimados: criterio $BIC$")
+```
+
+```{r,echo=FALSE}
+knitr::kable(t(coef(ajuste.7c.backward, which.max(ajuste.7c.backward.summary$adjr2))), caption="Tabla 18: Coeficientes estimados: criterio $R^{2}_{adj}$")
+```
+
+Tanto con el método de selección del mejor subconjunto posible, como con los métodos de selección progresiva hacia delante y selección progresiva hacia detrás, el modelo que mejor resultado proporciona, es el de 3 predictores. En el caso del mejor subconjunto posible y selección hacia delante los predictores son x, x³ y x⁴. En cambio, en el caso de selección hacia atrás, son x, x³ y x⁶.
+
+El modelo de selección hacia atrás presenta un valor de $R^{2}_{adj}$ ligeramente menor que los otros dos métodos. Sin embargo, presenta un $BIC$ y $C_p$ mayor. En el caso del $C_p$ la diferencia es más significativa que con respecto al $BIC$. En base a los anteriores valores, cabría esperar que el modelo proporcionado por los métodos de mejor subconjunto posible y selección hacia delante, presente un menor error.
+
+(e) Now fit a lasso model to the simulated data, again using X, X2,...,X10 as predictors. Use cross-validation to select the optimal value of $\lambda$. Create plots of the cross-validation error as a function of $\lambda$. Report the resulting coefficient estimates, and discuss theresults obtained.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r fig.cap="Fig. 10: Gráfica con el valor del MSE en función del parámetro λ para el ajuste con lasso", message=FALSE}
+library(glmnet)
+set.seed(12)
+# Se crea la matriz de diseño
+model.mat <- model.matrix(y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)+I(x^9)+I(x^10), data = dataset)[, -1]
+# Se realiza el ajuste de lasso
+ajuste.lasso <- cv.glmnet(model.mat, y, alpha=1)
+plot(ajuste.lasso)
+```
+El $\lambda$ escogido es aquel que produce el menor MSE, que es:
+
+```{r}
+mejor.lambda <- ajuste.lasso$lambda.min
+mejor.lambda
+```
+
+
+```{r}
+ajuste.lasso <- glmnet(model.mat, y, alpha = 1)
+# Se usa el mejor lambda
+lasso.prediction <- predict(ajuste.lasso, s = mejor.lambda, type="coefficients")
+lasso.prediction
+```
+El modelo de Lasso no pone a 0 los predictores x, x², x³, x⁴, x⁵ y x$^{10}$. El resto, lasso los pone a 0.
+
+
+(f) Now generate a response vector Y according to the model
+
+$Y=β0+β7X7+\epsilon$,
+
+and perform best subset selection and the lasso. Discuss the results obtained.
+
+```{r}
+# Se le da un valor arbitrario al coeficiente b7.
+b7 <- 11
+y <- b0 + b7*X^7 + eps
+
+dataset.7f <- data.frame(x=X, y=y)
+
+# Se realiza el ajuste con el método del mejor subconjunto posible
+ajuste.7f <- regsubsets(y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)+I(x^9)+I(x^10), data = dataset.7f, nvmax=10)
+
+ajuste.7f.summary <- summary(ajuste.7f)
+
+ajuste.7f.summary
+```
+
+```{r fig.cap="Fig. 11: Gráficas con el valor de los criterios $C_{p}$ ($AIC$), $BIC$, $R^{2}_{adj}$ con el método de selección del mejor subconjunto posible"}
+par(mfrow=c(2, 2))
+
+plot(ajuste.7f.summary$adjr2, type="l", ylab="adjR²", xlab="predictores")
+points(which.max(ajuste.7f.summary$adjr2), ajuste.7f.summary$adjr2[which.max(ajuste.7f.summary$adjr2)], col="blue")
+
+plot(ajuste.7f.summary$bic, type="l", ylab="BIC", xlab="predictores")
+points(which.min(ajuste.7f.summary$bic), ajuste.7f.summary$bic[which.min(ajuste.7f.summary$bic)], col="blue")
+
+plot(ajuste.7f.summary$cp, type="l", ylab="C_p", xlab="predictores")
+points(which.min(ajuste.7f.summary$cp), ajuste.7f.summary$cp[which.min(ajuste.7f.summary$cp)], col="blue")
+```
+Ahora, sin embargo, se tiene que con adjR² se selecciona un modelo con 3 predictores, y con BIC y $C_p$, se seleccionaría el modelo con 1 único predictor.
+
+```{r}
+coef(ajuste.7f, which.min(ajuste.7f.summary$cp))
+coef(ajuste.7f, which.min(ajuste.7f.summary$bic))
+coef(ajuste.7f, which.max(ajuste.7f.summary$adjr2))
+```
+
+Con el criterio BIC y $C_p$ se tiene, en efecto, el modelo con el predictor x⁷. Por otro lado, el según el criterio adjR², se tiene un modelo con tres predictores x, x⁷ y x$^{10}$. No obstante, con el método de elección del mejor subconjunto posible, y eligiendo el subconjunto que proporciona un menor BIC y $C_p$ se tendría el modelo más "cercano" al real. En las 3 versiones, el resultado asociado a x⁷ es casi 11, el cual es el valor introducido en el coeficiente $β_7$ \
+
+\
+
+Con el método de Lasso: \
+\
+
+
+```{r fig.cap="Fig. 12: Gráfica con el valor del MSE en función del parámetro λ para el ajuste con lasso"}
+set.seed(12)
+
+# Se crea la mattriz de diseño
+model.mat.7f <- model.matrix(y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)+I(x^9)+I(x^10), data = dataset.7f)[, -1]
+# Se realiza el ajuste de lasso
+ajuste.lasso.7f <- cv.glmnet(model.mat.7f, y, alpha=1)
+plot(ajuste.lasso.7f)
+```
+```{r}
+mejor.lambda.7f <- ajuste.lasso.7f$lambda.min
+mejor.lambda.7f
+
+# Se realiza el ajuste de lasso
+ajuste.lasso <- glmnet(model.mat.7f, y, alpha = 1)
+# Se realiza la prediccion
+lasso.prediction <- predict(ajuste.lasso, s = mejor.lambda.7f, type="coefficients")
+lasso.prediction
+```
+
+En cambio, con el método de Lasso, se han puesto a 0 todos los predictores excepto el x⁷ y x⁵, siendo x⁷ casi 11 (el valor introducido en el coeficiente $β_7$). Comparando ambos métodos, se tiene que con el método de Lasso se selecciona un predictor más que con el método del mejor subconjunto posible con los criterios BIC y $C_p$. Además, el valor de x⁷ se acerca más a 11 (valor introducido para el coeficiente b7) con el método del mejor subconjunto posible que con el de Lasso. Sin embargo, con el método de Lasso, el predictor x⁷ se aproxima bastante 11. Teniendo en cuenta la complejidad computacional que requiere el método del mejor subconjunto posible (ajustar $2^p$ modelos, donde p es el número de predictores) lasso ha proporcionado una buena aproximación.
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 8: (6.6.9 ISL) página 286-287, apartados: (a), (b), (c), (d), (g).
+</h3>
+
+9. In this exercise, we will predict the number of applications received using the other variables in the College data set.
+
+(a) Split the data set into a training set and a test set.
+```{r}
+library(ISLR2)
+summary(College)
+```
+Se crean un vector de índices generados aleatoriamente, que corresponderán a los datos de entrenamiento. Para, se asignarán aquellas observaciones que no estén en train.
+
+```{r}
+set.seed(12)
+
+# Se dividen los datos en: mitad para train y mitad para test como en el ISL.
+indices.train <- sample(1:nrow(College), nrow(College)/2)
+indices.test <- (-indices.train)
+
+train <- College[indices.train,]
+test <- College[indices.test,]
+```
+
+(b) Fit a linear model using least squares on the training set, and report the test error obtained.
+
+Se ajusta un modelo lineal con los datos de entrenamiento usando mínimos cuadrados.
+
+```{r}
+# Se realiza el ajuste del modelo lineal
+ajuste.9b <- lm(Apps ~ ., data=train)
+summary(ajuste.9b)
+```
+
+El error obtenido en test es:
+
+```{r}
+# Se realizan las predicciones
+predict.lineal.9b <- predict(ajuste.9b, test)
+
+# Se guardan en una tabla
+matriz.resultados9 <- matrix(nrow = 3, ncol = 2)
+
+# Se calcula el MSE
+resultado <- mean((test$Apps-predict.lineal.9b)^2)
+
+matriz.resultados9[1, ] <- c("Modelo lineal sin restricciones", round(resultado, digits=1))
+
+resultado
+```
+
+Se tiene un MSE de 1416217 unidades para test usando el modelo lineal.
+
+
+(c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
+
+Primero se crean las matrices de diseño para train y test:
+
+```{r}
+train.matrix <- model.matrix(Apps~., data=train)[,-1]
+test.matrix <- model.matrix(Apps~., data=test)[,-1]
+```
+
+La función glmnet, podría generar los lambdas internamente, pero se va a introducir la secuencia de valores $\lambda$ manualmente siguiendo el ejemplo de la página 275 del *ISL*:
+
+```{r}
+set.seed(12)
+# Se crea un grid de lambdas
+lambdas <- 10^seq(10, -2, length=2000)
+
+# Se realiza el ajuste de ridge con validación cruzada con el fin de elegir el mejor lambda
+ajuste.8c.ridge <- cv.glmnet(train.matrix, train$Apps, alpha=0, lambda=lambdas)
+# Se guarda el mejor lambda
+mejor.lambda.ridge <- ajuste.8c.ridge$lambda.min
+
+mejor.lambda.ridge
+
+ridge.base <- glmnet(train.matrix, train$Apps, alpha=0)
+# Se realiza la predicción con el mejor lambda
+prediction.ridge.9b <- predict(ridge.base, s=mejor.lambda.ridge, newx = test.matrix)
+
+# Se calcula el error.
+resultado <- mean((test$Apps-prediction.ridge.9b)^2)
+
+# Se guarda el error en una tabla
+matriz.resultados9[2, ] <- c("Modelo Ridge", round(resultado, digits=1))
+
+resultado
+```
+
+Se tiene un MSE con el modelo de Ridge de 2214758 unidades, mayor que para el modelo lineal sin restricciones.
+
+
+
+(d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+
+Se realiza un proceso similar al anterior
+
+```{r}
+set.seed(12)
+# Se crea un grid de lambdas
+lambdas <- 10^seq(10, -2, length=2000)
+
+# Se realiza el ajuste de lasso con validación cruzada con el fin de elegir el mejor lambda
+ajuste.8c.lasso <- cv.glmnet(train.matrix, train$Apps, alpha=1, lambda=lambdas)
+
+# Se guarda el mejor lambda
+mejor.lambda.lasso <- ajuste.8c.lasso$lambda.min
+
+mejor.lambda.lasso
+
+lasso.base <- glmnet(train.matrix, train$Apps, alpha=1)
+
+# Se realiza la predicción con el mejor lambda
+prediction.lasso.9b <- predict(lasso.base, s=mejor.lambda.lasso, newx = test.matrix)
+
+# Se calcula el error.
+resultado <- mean((test$Apps-prediction.lasso.9b)^2)
+
+# Se guarda el error en una tabla
+matriz.resultados9[3, ] <- c("Modelo Lasso", round(resultado, digits=1))
+
+resultado
+```
+El MSE con el modelo de Lasso es 1487432, el cual es inferior al MSE de Ridge pero todavía es superior al del modelo lineal.
+
+```{r}
+# Se obtienen los coeficientes
+prediction <- predict(lasso.base, s=mejor.lambda.lasso, type="coefficients")[1:ncol(College),]
+prediction
+```
+
+El número de coeficientes estimados diferentes de 0.
+
+```{r}
+prediction[prediction!=0]
+```
+Los coeficientes puestos a cero son Personal, Books, Enrroll y S.F.Ratio.
+
+(g) Comment on the results obtained. How accurately can we pre-dict the number of college applications received? Is there much difference among the test errors resulting from these five approaches?
+
+```{r}
+rownames(matriz.resultados9) <- c(paste("modelo", 1:3, sep=""))
+colnames(matriz.resultados9) <- c("nombre modelo", "MSE test")
+
+knitr::kable(matriz.resultados9, caption="Tabla 19. Resultado con diferentes modelos.")
+```
+
+\
+Puede observarse que el modelo que menor MSE proporciona es el modelo lineal sin restricciones, seguido del modelo de Lasso, y finalmente del modelo de Ridge. Esto podría deberse, a que se está penalizando el ajuste en exceso. La diferencia en MSE entre el modelo lineal sin restricciones y el de Lasso es moderadamente reducida, y difieren en 71215,3 unidades de MSE. Sin embargo, el modelo de Ridge difiere en 798541,5 unidades con respecto al modelo lineal sin restricciones, y 727326,2 unidades de MSE con respecto al modelo de Lasso.
+
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 9: (6.6.10 ISL) página 287.
+</h3>
+We have seen that as the number of features used in a model increases,the training error will necessarily decrease, but the test error may not.We will now explore this in a simulated data set.
+
+(a) Generate a data set with p=20 features, n=1000 observations, and an associated quantitative response vector generated according to the model
+
+$Y=Xβ + \epsilon$
+
+where β has some elements that are exactly equal to zero.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+set.seed(12)
+p = 20
+observations = 1000
+# Se genera el vector de error
+epsilon <- rnorm(observations)
+# Se genera el vector X
+datos <- rnorm(observations*p)
+# Se crea la matrix mediante el vector x con tamaño (1000, 20)
+x <- matrix(data=datos, ncol=p, nrow=observations)
+
+# Se genera el vector de coeficientes
+beta <- rnorm(p)
+
+# 4 coeficientes se ponen a 0
+ceros <- sample.int(p, p/5)
+
+beta[ceros] <- 0
+
+y <- x %*% beta + epsilon
+```
+
+
+(b) Split your data set into a training set containing 100 observations and a test set containing 900 observations.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+# Se generan 100 índices de forma aleatoria
+train <- sample.int(observations, size=100, replace=F)
+test <- (-train)
+
+train.x <- x[train,]
+train.y <- y[train]
+test.x <- x[test,]
+test.y <- y[test]
+```
+
+```{r}
+length(train.y)
+length(test.y)
+```
+
+(c) Perform best subset selection on the training set, and plot the training set MSE associated with the best model of each size.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+# Se crea el data frame con x e y de train
+entrenamiento <- data.frame(y=train.y, x = train.x)
+# Se realiza el ajuste del mejor subconjunto posible
+ajuste.mejor.subconjunto <- regsubsets(y~., data=entrenamiento, nvmax = p)
+sumario.bestsubset <- summary(ajuste.mejor.subconjunto)
+```
+
+Usando como referencia el script del libro *ISL* superior de la páginas 272. Primero se extraen los coeficientes para el mejor modelo con i predictores, se multiplican por las columnas de test para formar las predicciones, y finalmente se calcula el MSE.\
+
+```{r}
+errores.train <- rep(NA, p)
+# Se crea la matriz de diseño para los datos de entrenamiento
+train.matrix <- model.matrix(y~., data=entrenamiento, nvmax=p)
+
+# Se calcula el MSE de entrenamiento asociado al mejor modelo de cada tamaño
+for(i in 1:20){
+  coeficientes <- coef(ajuste.mejor.subconjunto, id=i)
+  predicciones <- train.matrix[, names(coeficientes)]%*%coeficientes
+  errores.train[i] <- mean((train.y - predicciones)^2)
+}
+
+# Se guardan los resultados en una tabla
+resultados.tabla <- matrix(nrow = p, ncol = 2)
+resultados.tabla[,1] <- errores.train
+
+rownames(resultados.tabla) <- c(paste("predictores ", 1:p, sep=""))
+colnames(resultados.tabla) <- c("MSE train", "MSE test")
+```
+
+```{r, fig.cap="Fig. 13: Gráfica con el valor del error en train en función de los diferentes modelos usando el método de selección del mejor subconjunto posible."}
+plot(errores.train, main="MSE para train con el método del mejor subconjunto posible", type="b", col="red")
+```
+
+(d) Plot the test set MSE associated with the best model of each size.
+
+<h4 style="color:blue">  Solución </h4>
+
+Para el caso de test:
+
+```{r, fig.cap="Fig. 14: Gráfica con el valor del error en test en función de los diferentes modelos usando el método de selección del mejor subconjunto posible."}
+# Se crea el data frame con x e y de test
+test <- data.frame(y=test.y, x = test.x)
+errores.test <- rep(NA, p)
+# Se crea la matriz de diseño con los datos de test
+test.matrix <- model.matrix(y~., data=test, nvmax=p)
+
+# Se calcula el mse de test asociado al mejor modelo de cada tamaño
+for(i in 1:20){
+  coeficientes <- coef(ajuste.mejor.subconjunto, id=i)
+  predicciones <- test.matrix[, names(coeficientes)]%*%coeficientes
+  errores.test[i] <- mean((test.y - predicciones)^2)
+}
+plot(errores.test, main="MSE para test con el método del mejor subconjunto posible" , type="b", col="red")
+# Se guardan los resultados en una tabla
+resultados.tabla[,2] <- errores.test
+```
+```{r}
+knitr::kable(resultados.tabla, caption="Tabla 20. MSE para train y test con el método del mejor subconjunto posible.")
+```
+
+
+\
+El $MSE_{test}$ decrece a medida que aumentan los predictores, con 10 predictores el MSE aumenta ligeramente con respecto al modelo de 9 predictores, y a partir de 11, el error decrece muy poco, siendo el mínimo asociado al modelo de 13 predictores.\
+
+\
+\
+
+(e) For which model size does the test set MSE take on its minimum value? Comment on your results. If it takes on its minimum value for a model containing only an intercept or a model containing all of the features, then play around with the way that you are generating the data in (a) until you come up with a scenario in which the test set MSE is minimized for an intermediate model size.
+
+<h4 style="color:blue">  Solución </h4>
+
+Para ver con cuántos predictores se alcanza el valor mínimo del MSE:
+
+```{r}
+which.min(errores.test)
+
+min(errores.test)
+```
+El mínimo (1.129859) se alcanza con un modelo con 13 predictores. A partir de 13, el MSE en test comienza a crecer ligeramente, quedando estancado en torno a 1.16. Por tanto, se podría entender que es un escenario en el que el MSE de test es mínimo con un modelo de tamaño intermedio.
+
+
+(f) How does the model at which the test set MSE is minimized compare to the true model used to generate the data? Commenton the coefficient values.
+
+Para ver el valor de los coeficientes:
+
+```{r}
+# Se obtiene el modelo con el mínimo mse en test
+id.min.predictores <- which.min(errores.test)
+# coeficientes del modelo con el MSE mínimo en test
+coef(ajuste.mejor.subconjunto, id=id.min.predictores)[-1]
+```
+
+```{r}
+names(beta) <- paste("x.", 1:p, sep="")
+beta
+```
+```{r}
+ceros
+```
+
+Como puede comprobarse, el modelo con 13 predictores, no ha escogido los predictores puestos a 0 inicialmente, que son el 11, 16, 18 y 19. Además, el valor asociado a los predictores (que no son 0), se asemeja a los β originales.
+
+
+(g) Create a plot displaying $\sqrt{\sum_{j=1}^n (β_j - \hat{β}_j^r)²}$ for a range of values of r, where $\hat{β}_j^r$ is the jth coefficient estimate for the best model containing r coefficients. Comment on what you observe. How does this compare to the test MSE plot from (d)?
+
+```{r, fig.cap="Fig. 15: Gráfica con los valores de del cálculo del error según la fórmula del propio enunciado."}
+test.g <- rep(NA, p)
+
+columnas <- paste("x.", 1:p, sep="")
+
+for (i in 1:p) {
+    # Se extraen los coeficientes
+    coeficientes <- coef(ajuste.mejor.subconjunto, id = i)
+    coeficientes.nombres <- names(coeficientes)
+    cols <- columnas %in% coeficientes.nombres
+    # Se calcula el error de test
+    test.g[i] <- sqrt(sum((beta[cols] - coeficientes[coeficientes.nombres %in% columnas])^2)+sum(beta[!cols])^2)
+}
+
+plot(test.g, ylab = "Error", xlab = "Coeficientes", type = "b")
+points(which.min(test.g), test.g[which.min(test.g)], col="red")
+which.min(test.g)
+test.g[which.min(test.g)]
+```
+
+Donde hay un menor error dado la fórmula $\sqrt{\sum_{j=1}^n (β_j - \hat{β}_j^r)²}$, es para el modelo de 6 predictores, con un error de 0,3241888 unidades. Sin embargo, no es el modelo que menor MSE presenta en el conjunto de test, ya que ese es, el modelo de 13 predictores con un MSE de 1,129859. Puesto que el error con la fórmula $\sqrt{\sum_{j=1}^n (β_j - \hat{β}_j^r)²}$ penaliza más aquellos coeficientes estimados que se alejan de los originales (o verdaderos), no implica un menor $MSE_{test}$.
+
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 10: (6.6.11 ISL) página 288.
+</h3>
+
+11. We will now try to predict per capita crime rate in the Boston dataset.
+
+(a) Try out some of the regression methods explored in this chapter, such as best subset selection, the lasso, ridge regression, and PCR. Present and discuss results for the approaches that you consider.
+
+```{r message = FALSE}
+library(MASS)
+data(Boston)
+summary(Boston)
+```
+
+Para el método de selección del mejor conjunto posible, voy a basarme en el ejemplo del libro *ISL* de la página 272 donde realiza este el método con validación cruzada. Como indica el *ISL*, no existe la función **predict** para **regsubsets()**, por tanto, usaré como base la que el propio libro propone:
+
+```{r}
+predict.regsubsets<-function(object, newdata, id, ...){
+    form<-as.formula(object$call[[2]])
+    mat<-model.matrix(form, newdata)
+    coefi<-coef(object, id = id)
+    xvars<-names(coefi)
+    mat[,xvars]%*%coefi
+}
+```
+
+Se crean las particiones:
+
+```{r}
+set.seed(12)
+k <- 10
+
+p <- ncol(Boston)-1
+# 10 particiones
+folds <- sample(rep(1:k, length=nrow(Boston)))
+
+errores.vc <- matrix(NA, k, p, dimnames = list(NULL, paste(1:p)))
+```
+
+
+A continuación se ajustará el modelo con k = 10 folds (particiones).
+
+```{r, fig.cap="Fig. 16: Gráfica con el error para cada subconjunto de predictores usando el método del mejor subconjunto posible mediante validación cruzada."}
+for (j in 1:k) {
+    # Se realiza el ajuste mediante CV
+    mejor.ajuste <- regsubsets(crim ~ ., data = Boston[folds != j, ], nvmax = p)
+    for (i in 1:p) {
+        # Se hace la predicción mediante CV
+        predicciones <- predict(mejor.ajuste, Boston[folds == j, ], id = i)
+        errores.vc[j, i] <- mean((Boston$crim[folds == j] - predicciones)^2)
+    }
+}
+# Se calcula el error medio
+mean.cv.errors <- apply(errores.vc, 2, mean)
+plot(mean.cv.errors, type = "b", main="Mejor subconjunto posible CV con k = 10", ylab = "Error", xlab = "Predictores")
+```
+
+```{r}
+min(mean.cv.errors)
+which.min(mean.cv.errors)
+```
+El menor MSE para el método de elección del mejor subconjunto es de 44,89955 y corresponde al modelo con 8 predictores.
+
+Con el método de Lasso:
+
+```{r}
+set.seed(12)
+# Se crea la matriz de diseño
+matriz.x <- model.matrix(crim~.,Boston)[, -1]
+y.ej10 <- Boston$crim
+# Se realiza el ajuste de lasso
+ajuste.lasso <- cv.glmnet(matriz.x, y.ej10, alpha = 1, type.measure = "mse")
+```
+
+```{r, fig.cap="Fig. 17: Gráfica con el error del asjute de lasso estimado mediante validación cruzada para los diferentes valores de λ."}
+plot(ajuste.lasso)
+```
+```{r}
+lasso.base <- glmnet(matriz.x, y.ej10, alpha = 1, type.measure = "mse")
+# Se comprueban los coeficientes puestos a 0
+prediction <- predict(lasso.base, s=ajuste.lasso$lambda.min, type="coefficients")[1:ncol(Boston),]
+prediction
+```
+```{r}
+ajuste.lasso$cvm[which.min(ajuste.lasso$cvm)]
+```
+Con lasso mediante validación cruzada se tiene un error mínimo de 44.66896 unidades frente al error del método del mejor subconjunto posible que presenta un error mínimo de 44.89955 unidades. Además, 2 de los coeficientes los pone a 0.
+
+Con el método de ridge:
+
+```{r}
+set.seed(12)
+# Se realiza el ajuste de ridge
+ajuste.ridge <- cv.glmnet(matriz.x, y.ej10, alpha = 0, type.measure = "mse")
+```
+
+```{r, fig.cap="Fig. 17: Gráfica con el error del asjute de ridge estimado mediante validación cruzada para los diferentes valores de λ."}
+plot(ajuste.ridge)
+```
+```{r}
+ridge.base <- glmnet(matriz.x, y.ej10, alpha = 0, type.measure = "mse")
+# Se comprueba el valor de los coeficientes.
+prediction <- predict(ridge.base, s=ajuste.ridge$lambda.min, type="coefficients")[1:ncol(Boston),]
+prediction
+```
+```{r}
+ajuste.ridge$cvm[which.min(ajuste.ridge$cvm)]
+```
+Por otro lado, con el ajuste de ridge, se tiene mediante validación cruzada un error mínimo de 45.00283 unidades el cual es ligeramente superior al de lasso (44.66896 unidades) y al del menor subconjunto posible (44.89955 unidades). Además, como cabría esperar, no hay coeficientes puestos a 0.
+
+
+(b) Propose a model (or set of models) that seem to perform well on this data set, and justify your answer. Make sure that you are evaluating model performance using validation set error, cross-validation, or some other reasonable alternative, as opposed tousing training error.
+
+Los métodos utilizados han sido evaluados mediante validación cruzada. Se podría usar el método de Partial Least Squares o el de regresión mediante SVM, sin embargo, no estaban en el temario referente a esta práctica.
+
+(c) Does your chosen model involve all of the features in the dataset? Why or why not?
+
+No, por ejemplo, con el método del mejor subconjunto posible, se tienen 8 predictores y no los 13. Esto se debe a que el modelo con 8 predictores produce el menor MSE. Con Ridge sí se han "elegido" los 13 predictores, pero esto se debe a que, Ridge no tiende a poner a 0 los predictores (salvo que $\lambda \to \infty$ ) a diferencia de Lasso, que sí tiende a hacerlo, escogiendo 11 predictores en total.

@@ -1,0 +1,1279 @@
+---
+title: "Soluciones Hoja 1"
+subtitle: | 
+  Aprendizaje estadístico (43455)
+  
+  Curso 2021/2022
+
+
+author: "Pablo Manresa Nebot"
+date: "24 de noviembre de 2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h3 style="color:red">
+Ejercicio 1: (3.7.1 ISL) página 121.
+</h3>
+
+Describe the null hypotheses to which the p-values given in Table 3.4 correspond. Explain what conclusions you can draw based on these p-values. Your explanation should be phrased in terms of sales, TV, radio, and newspaper, rather than in terms of the coefficients of the linear model.
+
+<h4 style="color:blue">  Solución </h4>
+
+La hipótesis nula H<sub>0</sub> : β<sub>1</sub> = 0, β<sub>2</sub> = 0, β<sub>3</sub> = 0. Es decir, la variable respuesta ventas, no está relacionada con los predictores TV, radio, o periódico, en el sentido de que, un cambio en éstas, no tendría efecto en ella.
+
+En cuanto a la tabla, se tiene que los predictores TV, y Radio, tienen un p-valor inferior a 0.0001, por tanto, para ellos puede rechazarse H<sub>0</sub><sup>tv</sup> y H<sub>0</sub><sup>radio</sup>. En cambio, 
+para el predictor periódico, se tiene que su p-valor es de 0.8599, por tanto, en este caso no puede rechazarse H<sub>0</sub><sup>periódico</sup>. Esto quiere decir que un cambio en el predictor periódico no afectaría a las ventas.
+\
+\
+\
+\
+<h3 style="color:red">
+Ejercicio 2: (3.7.3 ISL) página 121-122.
+</h3>
+
+Suppose we have a data set with five predictors, X<sub>1</sub>=GPA, X<sub>2</sub>=IQ, X<sub>3</sub>= Level (1 for College and 0 for High School),X4= Interaction between GPA and IQ, and X<sub>5</sub>= Interaction between GPA and Level. The response is starting salary after graduation (in thousandsof dollars). Suppose we use least squares to fit the model, and get $\hat{β0}=50$, $\hat{β1} = 20$, $\hat{β2}=0.07$, $\hat{β3}= 35$, $\hat{β4}=0.01$, $\hat{β5}=−10$.
+
+##### (a) Which answer is correct, and why?
+
+i. For a fixed value of IQ and GPA, high school graduates earn more, on average, than college graduates.
+
+ii. For a fixed value of IQ and GPA, college graduates earn more, on average, than high school graduates.
+
+iii. For a fixed value of IQ and GPA, high school graduates earn more, on average, than college graduates provided that the GPA is high enough.
+
+iv. For a fixed value of IQ and GPA, college graduates earn more, on average, than high school graduates provided that the GPA is high enough.
+
+<h4 style="color:blue">  Solución </h4>
+usando la fórmula de la regresión lineal:\
+\
+$\hat{y} = \hat{β_0} + \hat{β_1}X_1 + \hat{β_2}X_2 + \hat{β_3}X_3 + \hat{β_4}X_4 + \hat{β_5}X_5$ \
+\
+Los términos de interacción $X_4 = GPA·IQ$ y $X_5 = GPA·Nivel$ \
+\
+Que se reformula como: \
+\
+$\hat{y} = \hat{β_0} + \hat{β_1}X_1 + \hat{β_2}X_2 + \hat{β_3}X_3 + \hat{β_4}X_1·X_2 + \hat{β_5}X_1·X_3$ \
+\
+donde $X_3 = \begin{cases} 1 \text{ Si Nivel educativo Universitario, } \\ 0 \text{ Si nivel educativo Instituto.} \end{cases}$\
+
+\
+Finalmente se tiene:\
+\
+
+$\hat{y} = \hat{β_0} + β_1GPA + β_2IQ +β_3Nivel +β_4GPA·IQ +β_5GPA·Nivel$\
+\
+Para el nivel de instituto:\
+\
+$\hat{y} = \hat{β_0} + β_1GPA + β_2IQ +β_4GPA·IQ$\
+\
+$\hat{y} = 50 + 20GPA + 0.07IQ +0.01GPA·IQ$\
+\
+En cambio, para el nivel de universidad:\
+\
+$\hat{y} = \hat{β_0} + β_1GPA + β_2IQ +β_3 +β_4GPA·IQ +β_5GPA$\
+\
+$\hat{y} = 50 + 20GPA + 0.07IQ +35 +0.01GPA·IQ -10GPA$\
+\
+
+Si el salario de los graduados en el instituto es mayor que los graduados universitarios, se tendría que $50 + 20GPA \ge 85 + 10GPA$ que despejando, sería $GPA \ge 3.5$. Se concluye con que, con los valores fijos de IQ y GPA, para que el salario del nivel instituto sea mayor que los del nivel universitario, se tiene que tener un predictor $GPA \ge 3.5$, por tanto, la opción correcta es la iii. Es decir, los graduados de instituto, ganan más, de media, que los graduados en universitarios siempre que el predictor GPA sea lo suficientemente grande. \
+
+(b) Predict the salary of a college graduate with IQ of 110 and a GPA of 4.0.\
+\
+$\hat{y}_0 = 50 + 20 · 4 + 0.07 · 110 + 35 + 0.01 · 4 · 110 - 10 · 4$\
+\
+$\hat{y}_0 = 137.1\$$\
+\
+Puesto que la variable respuesta viene dada en unidad de miles de dólares, el salario predicho sería de 137100$ en total.
+
+(c) True or false: Since the coefficient for the GPA/IQ interaction term is very small, there is very little evidence of an interaction effect. Justify your answer.\
+\
+
+Que el coeficiente de interacción entre GPA e IQ, sea pequeño, no implica que no haya efecto de interacción. Para verificar si existe o no, se usan métodos como el p-valor, o el F-estadístico.
+
+\
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 3: (3.7.10 ISL) página 124-12.
+</h3>
+
+10.This question should be answered using the Carseats data set.
+
+(a) Fit a multiple regression model to predict Sales using Price, Urban, and US.
+
+<h4 style="color:blue">  Solución </h4>
+
+Se instala el paquete ISLR2 que contiene el conjunto de datos para este ejercicio (Carseats). 
+```{r download}
+#install.packages("ISLR2")
+```
+
+Primero se cargan los paquetes.
+
+```{r}
+library(ISLR2)
+summary(Carseats)
+```
+
+```{r}
+ej10.fit.a <- lm(Carseats$Sales~Carseats$Price+Carseats$Urban+Carseats$US)
+summary(ej10.fit.a)
+```
+
+(b) Provide an interpretation of each coefficient in the model. Be careful some of the variables in the model are qualitative!\
+
+<h4 style="color:blue">  Solución </h4>
+\
+Un incremento de una unidad en el predictor precio, conllevaría el decremento en 54.45 unidades en ventas si los otros predictores están fijos. Por otro lado, se puede interpretar que la diferencia en las ventas medias de zona urbana con respecto a las zonas rurales son 21.91 unidades inferior, si los otros predictores están fijos. Finalmente, si el ciudadano es de US, la cantidad de veces es 1200.57 más que si no es de US, si el resto de los predictores están fijos.
+
+(c) Write out the model in equation form, being careful to handle the qualitative variables properly.\
+
+<h4 style="color:blue">  Solución </h4>
+
+$Sales = β_0 + β_1Price + β_2Urban +β_3US + \epsilon$\
+\
+$Sales = 13.043469 -0.054459Price -0.021916Urban + 1.200573US + \epsilon$\
+
+(d) For which of the predictors can you reject the null hypothesis $H0:β_j= 0$? \
+\
+<h4 style="color:blue">  Solución </h4>
+\
+Analizando los p-valores, rechazaría la hipótesis nula para el predictor Precio, y el predictor US.\
+
+(e) On the basis of your response to the previous question, fit a smaller model that only uses the predictors for which there is evidence of association with the outcome.
+
+<h4 style="color:blue">  Solución </h4>
+
+``` {r}
+ej10.fit.e <- lm(Carseats$Sales~Carseats$Price+Carseats$US)
+summary(ej10.fit.e)
+```
+(f) How well do the models in (a) and (e) fit the data? \
+
+<h4 style="color:blue">  Solución </h4>
+
+El modelo (e) presenta un error estándar residual muy ligeramente inferior que el modelo (a). Además, la diferencia entre los R² ajustados también es muy pequeña. El modelo (e) es levemente mejor. Explica un 23.93% de la varianza.  \
+\
+
+(g) Using the model from (e), obtain 95 % confidence intervals for the coefficient(s). \
+
+<h4 style="color:blue">  Solución </h4>
+
+``` {r}
+confint(ej10.fit.e)
+```
+
+(h) Is there evidence of outliers or high leverage observations in the model from (e)?\
+
+<h4 style="color:blue">  Solución </h4>
+
+Para comprobar si existe evidencia de outliers u observaciones con high leverage en el modelo (e), se podría comprobar gráficamente. Para los outliers con los residuos estudentizados:\
+
+``` {r}
+plot(predict(ej10.fit.e), rstudent(ej10.fit.e))
+```
+\
+Como menciona el libro *ISL* (*An Introduction to Statistical Learning*) "aquellas observaciones residuales estudentizadas que son mayores que 3 en valor absoluto son posibles outliers." Todas las observaciones parecen encontrarse en ese rango. Para verificarlo:
+
+\
+
+```{r}
+rstudent(ej10.fit.e)[which(abs(rstudent(ej10.fit.e)) > 3)]
+```
+Aquí se verifica, en efecto, que no hay ninguna observación residual estudentizada, que en valor absoluto sea mayor a 3. Por tanto, puede concluirse con que no hay outliers.\
+\
+
+En cambio, para verificar la existencia de observaciones con high leverage se puede plotear el ajuste del modelo (e), y observar la gráfica inferior derecha:\
+\
+``` {r}
+par(mfrow=c(2, 2))
+plot(ej10.fit.e)
+```
+\
+Observando la gráfica anteriormente mencionada, puede verse que ciertas observaciones están indicadas como observaciones con high leverage. Esto puede comprobarse dado que, una observación cuya estadística $h_i$ exceda ampliamente $\frac{p+1}{n}$ es sospechosa de tener high leverage. Por ejemplo, aquellas observaciones que excedan $\frac{2(p+1)}{n}$.
+
+Como se tiene que los predictores Price y US presentan un p-valor inferior a 0.05, y han sido los usados, se fijará p = 2.
+\
+
+```{r}
+(2+1)/dim(Carseats)[1]
+
+(2*(2+1))/dim(Carseats)[1]
+```
+
+
+Por lo que hay algunos puntos que tendrían high leverage ya que lo exceden.
+
+
+De forma gráfica:\
+\
+```{r}
+plot(hatvalues(ej10.fit.e))
+```
+\
+Puede observarse como algunos puntos exceden el valor 0.015.
+
+
+\
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 4: (3.7.13 ISL) páginas 126-127.
+</h3>
+
+\
+
+13.In this exercise you will create some simulated data and will fit simple linear regression models to it. Make sure to use set.seed(1) prior to starting part (a) to ensure consistent results. \
+
+(a) Using the rnorm() function, create a vector, x, containing 100 observations drawn from a N(0,1) distribution. This represents a feature, X.\
+\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+set.seed(1)
+
+x <- rnorm(n=100, mean=0, sd=1)
+x
+```
+
+(b) Using the rnorm() function, create a vector, eps, containing 100 observations drawn from a N(0,0.25) distribution—a normal distribution with mean zero and variance 0.25.\
+\
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+eps <- rnorm(n=100, mean=0, sd=sqrt(0.25))
+eps
+```
+
+
+(c) Using x and eps, generate a vector y according to the model
+
+<h4 style="color:blue">  Solución </h4>
+
+$Y = -1 + 0.5X + \epsilon$ &emsp;&emsp; (3.39)
+
+```{r}
+y = -1 + 0.5 * x + eps
+y
+```
+
+\
+
+What is the length of the vector y?
+```{r}
+length(y)
+```
+\
+What are the values of $β_0$ and $β_1$ in this linear model?\
+\
+El valor $β_0$ en este modelo lineal es -1, y el valor $β_1$ es 0.5.\
+
+
+(d) Create a scatter plot displaying the relationship between x and y. Comment on what you observe.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+plot(x, y)
+```
+\
+Parece que hay una relación lineal entre el predictor X y la variable respuesta Y. Pero hay cierto ruido introducido por la variable eps.\
+
+
+
+(e) Fit a least squares linear model to predict y using x. Comment on the model obtained. How do $\hat{β}_0$ and $\hat{β}_1$ compare to $β_0$ and $β_1$? \
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+fit13.e <- lm(y ~ x)
+summary(fit13.e)
+```
+Aparece el warning "NAs introducidos por coerción", pero se han observado los datos, y no aparece ningún dato NAN.\
+\
+El F-estadístico es 85.99, que es mucho mayor que 1, y como su p-valor es tan pequeño, se podría rechazar $H_0$. Además, los valores de $\hat{β}_0$ y $\hat{β}_1$ son muy cercanos a los valores reales de los coeficientes $β_0$ y $β_1$.\
+
+
+
+
+(f) Display the least squares line on the scatterplot obtained in (d). Draw the population regression line on the plot, in a different color. Use the legend() command to create an appropriate leg-end.\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+plot(x, y)
+abline(fit13.e, col="green")
+abline(a=-1, b=0.5, col="red")
+legend("bottomright", legend = c("Regresión: Poblacional", "Regresión: Mínimos cuadrados"), col=c("green", "red"), lty=c(1, 1))
+```
+
+(g) Now fit a polynomial regression model that predicts y using x and x². Is there evidence that the quadratic term improves the model fit? Explain your answer.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+model13.g <- lm(y~ x + I(x^2))
+summary(model13.g)
+```
+Al comprobar el p-valor asociado al término cuadrático, puede observarse que es mayor a 0.05, por tanto, no podría rechazarse $H_0$ para dicho término, y se tendría que no es significante. Además, el F-estadístico ha disminuido de 85.99 a 44.4, y el error estándar residual ha disminuido ligeramente. Por tanto, no hay evidencias claras de que el término cuadrático mejora el ajuste del modelo.\
+
+
+
+(h) Repeat (a)–(f) after modifying the data generation process in such a way that there is less noise in the data. The model (3.39) should remain the same. You can do this by decreasing the variance of the normal distribution used to generate the error term $\epsilon$ in (b). Describe your results. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Como menciona el ejercicio, para disminuir el ruido en los datos, se reduce la varianza de la distribución normal usada para generar el término de error. Por ejemplo, se podría reducir a 0.1 la desviación típica. \
+
+\
+
+```{r}
+set.seed(1)
+
+x <- rnorm(n=100, mean=0, sd=1)
+eps <- rnorm(n=100, mean=0, sd=0.1)
+y = -1 + 0.5 * x + eps
+fit13.h <- lm(y ~ x)
+
+summary(fit13.h)
+```
+
+Ahora se puede observar como los coeficientes se aproximan más a $β_0$ y $β_1$. Esto es debido a que al reducir el término de error $\epsilon$, el ajuste es más preciso. Además, ahora se explica el 95.6% de la varianza (R²), y el RSE es muy bajo, en torno al 0.096%.\
+
+
+```{r}
+plot(x, y)
+abline(fit13.h, col="green")
+abline(a=-1, b=0.5, col="red")
+legend("bottomright", legend = c("Regresión: Poblacional", "Regresión: Mínimos cuadrados"), col=c("green", "red"), lty=c(1, 1))
+```
+\
+La relación es casi lineal. Además es tan preciso ahora que se solapan las líneas de regresión de la población y la de mínimos cuadrados.\
+
+
+(i) Repeat (a)–(f) after modifying the data generation process in such a way that there is more noise in the data. The model (3.39) should remain the same. You can do this by increasing the variance of the normal distribution used to generate the error term $\epsilon$ in (b). Describe your results. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Se ha aumentado la desviación típica de la distribución normal a 0.7 para el término de error $\epsilon$, con el fin de aumentar el ruido en los datos. 
+```{r}
+set.seed(1)
+
+x <- rnorm(n=100, mean=0, sd=1)
+eps <- rnorm(n=100, mean=0, sd=0.7)
+
+y = -1 + 0.5 * x + eps
+fit13.i <- lm(y ~ x)
+
+summary(fit13.i)
+```
+Ahora, sin embargo, únicamente se explica un 30% de la varianza (R²) mediante el ajuste lineal. Además, el error residual estándar ha aumentado y el F-estadístico ha disminuido.  
+
+
+```{r}
+plot(x, y)
+abline(fit13.i, col="green")
+abline(a=-1, b=0.5, col="red")
+legend("bottomright", legend = c("Regresión: Poblacional", "Regresión: Mínimos cuadrados"), col=c("green", "red"), lty=c(1, 1))
+```
+\
+Ahora la relación entre X e Y no se aprecia tan lineal como la anterior.
+
+(j) What are the confidence intervals for $β_0$ and $β_1$ based on the original data set, the noisier data set, and the less noisy dataset? Comment on your results.
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+confint(fit13.e)
+```
+
+```{r}
+confint(fit13.h)
+```
+
+```{r}
+confint(fit13.i)
+```
+En cuanto al término x todos están centrados en 0.499 $\approx$ 0.5. Además, cuanto menor es el ruido (en este caso la varianza del término de error), menor amplitud tiene el intervalo de confianza.\
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 5: (3.7.14 ISL) páginas 127-128.
+</h3>
+\
+
+14.This problem focuses on the collinearity problem.
+
+(a) Perform the following commands in R:
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+set.seed(1)
+x1 <- runif(100)
+x2 <- 0.5*x1+rnorm(100)/10
+y <- 2 + 2 * x1 + 0.3 * x2 + rnorm(100)
+```
+
+The last line corresponds to creating a linear model in which y is a function of $x_1$ and $x_2$. Write out the form of the linear model.
+
+La forma del modelo lineal es:\
+\
+$y = 2 + 2 X_1 + 0.3 X_2 + \epsilon$\
+\
+
+What are the regression coefficients?\
+\
+Los coeficientes son 2, 2 y 0.3. El término de error $\epsilon$ corresponde a N(0, 1), que son los parámetros dados por defecto en la función rnorm.\
+\
+
+(b) What is the correlation between $x_1$ and $x_2$? \
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+cor(x1, x2)
+```
+La correlación entre ambas variables es alta.
+
+
+Create a scatter plot displaying the relationship between the variables.
+```{r}
+plot(x1, x2)
+```
+\
+Además, puede comprobarse visualmente como hay una correlación lineal entre ambas variables.\
+\
+
+(c) Using this data, fit a least squares regression to predict y using x1 and x2. Describe the results obtained. What are $\hat{β}_0$,$\hat{β_1}$, and $\hat{β_2}$? How do these relate to the true $β_0$, $β_1$, and $β_2$? Can you reject the null hypothesis $H_0 : β_1 = 0$ ? How about the null hypothesis $H_0 : β_2 = 0$?
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+fit.ej14.c <- lm(y ~ x1 + x2)
+summary(fit.ej14.c)
+```
+$\hat{β}_0$ sería 2.1305, $\hat{β_1}$ 1.4396, y $\hat{β_2}$ 1.0097. De los anteriores, $\hat{β}_0$ es el más cercano, ya que $β_0$ es 2. Sin embargo, $\hat{β}_1$ y $\hat{β}_2$ se alejan más. Como el p-valor es inferior a 0.05, podría rechazarse $H_0 : β_1 = 0$. En cambio, $H_0 : β_2 = 0$ no podría rechazarse, dado que su p-valor es superior a 0.05. 
+
+
+(d) Now fit a least squares regression to predict y using only x1. Comment on your results. Can you reject the null hypothesis $H_0 : β_1 = 0$?\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+fit.ej14.d <- lm(y~x1)
+summary(fit.ej14.d)
+```
+El p-valor de x1 es inferior a 0.05, por tanto, se podría rechazar $H_0 : β_1 = 0$. El valor de su coeficiente se acerca más a 2, que con el ajuste para los predictores x1, y x2. Además, el R² ha disminuido muy poco.\
+\
+
+(e) Now fit a least squares regression to predict y using only x2. Comment on your results. Can you reject the null hypothesis $H_0 : β_1 = 0$?\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+fit.ej14.e <- lm(y ~ x2)
+summary(fit.ej14.e)
+```
+Ahora, sin embargo, se tiene que el p-valor asociado al predictor x2, es también menor que 0.05, por tanto se rechazaría $H_0 : β_1 = 0$ para él. Por otro lado, el R² ha disminuido, por tanto, hay menos explicación de varianza con el predictor x2 que con x1, o con ambos. Además, el RSE ha aumentado ligeramente. Otro aspecto reseñable es que el coeficiente de x2 mediante mínimos cuadrados se aleja bastante del real.\
+\
+
+(f) Do the results obtained in (c)–(e) contradict each other? Explain your answer. \
+
+<h4 style="color:blue">  Solución </h4>
+
+No, dado que hay colinealidad, y es difícil separar los efectos individuales de las variables colineales en la respuesta. Como menciona *ISL* (pág. 101): "La colinealidad reduce la precisión de las estimaciones de los coeficientes de regresión produciendo que el error estándar de $\hat{β}_j$ crezca. En consecuencia, la colinealidad resulta en un descenso en el t-estadístico. Como resultado de la colinealidad podríamos equivocarnos rechazando $H_j : β_j = 0$."
+
+El modelo que usa los predictores x1 y x2, presenta como error estándar, 0.7212 y 1.1337. Por otro lado, el modelo que únicamente usa x1 como predictor presenta un error estándar de 0.3963, y el que usa únicamente x2 0.6330.\
+\
+Análogamente al ejemplo del libro *ISL* (Tabla 3.11), con la presencia de la colinealidad, se ha enmascarado la importancia del predictor x2 (ISL pág. 101).\
+
+\
+
+(g) Now suppose we obtain one additional observation, which was unfortunately mismeasured.\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+x1 <- c(x1, 0.1)
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+```
+
+
+Re-fit the linear models from (c) to (e) using this new data. What effect does this new observation have on the each of the models?
+
+Ajuste con x1 y x2
+
+```{r}
+fit.ej14.g12 <- lm(y ~ x1 + x2)
+summary(fit.ej14.g12)
+```
+Tras realizar las operaciones de inserción, el modelo compuesto por ambos predictores presenta un error estándar residual y R² mayor que su versión previa sin las operaciones de inserción.
+
+
+Ajuste con x1:
+
+```{r}
+fit.ej14.g1 <- lm(y ~ x1)
+summary(fit.ej14.g1)
+```
+En este caso, sin embargo, presenta un R² inferior, y un error estándar residual ligeramente superior con respecto a su versión previa a la inserción.\
+\
+
+Ajuste con x2:
+
+```{r}
+fit.ej14.g2 <- lm(y ~ x2)
+summary(fit.ej14.g2)
+```
+En este caso, se tiene un R² y error residual estándar superior con respecto a su misma versión sin la inserción. \
+\
+
+In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.\
+\
+Se va a comprobar para el modelo $y = β_0 + β_1x1 + β_2x2$ si dicha observación es un outlier y/o punto con high leverage. Visualmente:\
+\
+```{r}
+plot(predict(fit.ej14.g12), rstudent(fit.ej14.g12))
+```
+\
+
+Y analíticamente:\
+\
+```{r}
+rstudent(fit.ej14.g12)[which(abs(rstudent(fit.ej14.g12)) > 3)]
+```
+Como no hay ninguna observación residual estudentizada que en valor absoluto sea mayor a 3, puede concluirse con que no hay outliers.\
+\
+
+En cuanto a las observaciones con high leverage:\
+\
+
+```{r}
+par(mfrow=c(2, 2))
+plot(fit.ej14.g12)
+```
+\
+Visualmente puede observarse en la gráfica inferior derecha como el punto 101 está muy alejado del resto. \
+
+```{r}
+plot(hatvalues(fit.ej14.g12))
+```
+
+```{r}
+hatvalues(fit.ej14.g12)[which.max(hatvalues(fit.ej14.g12))]
+```
+Por lo que se concluye, que la última observación es la que presenta high leverage.\
+\
+
+Para el modelo $y = β_0 + β_1x1$. Los outliers:\
+\
+```{r}
+plot(predict(fit.ej14.g1), rstudent(fit.ej14.g1))
+```
+\
+Visualmente puede comprobarse como hay un punto que excede en valor absoluto al 3. O sea:
+```{r}
+rstudent(fit.ej14.g1)[which(abs(rstudent(fit.ej14.g1)) > 3)]
+```
+En efecto, esa observación es la última. \
+\
+
+```{r}
+par(mfrow=c(2, 2))
+plot(fit.ej14.g1)
+```
+\
+En la gráfica superior izquierda, puede observarse de forma inmediata como en efecto, el punto 101 se encuentra por encima de 3, lo cual, es indicativo de outlier. En cuanto a si algún punto contiene high leverage, en la gráfica inferior derecha se puede observar como todos los puntos se encuentran relativamente cerca entre sí.\
+
+```{r}
+plot(hatvalues(fit.ej14.g1))
+```
+\
+Por lo que no hay ningún punto con high leverage en este modelo.\
+
+\
+
+Para el modelo $y = β_0 + β_1x2$\
+\
+
+En cuanto a los outliers:\
+\
+```{r}
+plot(predict(fit.ej14.g2), rstudent(fit.ej14.g2))
+```
+\
+Parece que ningún punto supera en valor absoluto al 3.\
+\
+```{r}
+rstudent(fit.ej14.g2)[which(abs(rstudent(fit.ej14.g2)) > 3)]
+```
+Por lo que se puede concluir que no hay outliers. En cuanto a las observaciones con high leverage:\
+\
+
+```{r}
+par(mfrow=c(2, 2))
+plot(fit.ej14.g2)
+```
+\
+A simple vista, en la gráfica inferior derecha parece que el punto 101 está bastante alejado del resto y presenta high leverage.\
+\
+
+```{r}
+plot(hatvalues(fit.ej14.g2))
+```
+\
+Visualmente puede comprobarse, como, en efecto, el último punto está muy alejado del resto.
+
+```{r}
+hatvalues(fit.ej14.g2)[which.max(hatvalues(fit.ej14.g2))]
+```
+Se concluye con que el último punto es el que presenta high leverage.\
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 6.
+</h3>
+
+6. Escribir una función en R que permita:
+
+(i) Estimar con el bootstrap el error estándar (es decir la desviación típica) de las estimaciones por mínimos cuadrados de los coeficientes de un modelo de regresión.
+
+(ii) Calcular intervalos de confianza de nivel 0.95 para los coeficientes del modelo utilizando el bootstrap y el método de los percentiles.
+
+Los parámetros de entrada de la función serán: \
+\
+- reg:  Un objeto lm(y x,data=..., x=TRUE, y=TRUE). \
+- B:  Número de muestras bootstrap. \
+- Nivel:  Nivel del intervalo de confianza. \
+
+Sea m el número de coeficiente del modelo de regresión reg (incluyendo el término constante).
+La función tendrá como salida:
+
+• El nivel de los intervalos de confianza calculados.
+
+• Una matriz de tamaño m x 3 donde: cada fila corresponde a un coeficiente; la primera columna contiene la de la estimaciónn del coeficiente (estimada con el método bootstrap);  la  segunda  y  la  tercera  columna  contienen  el  extremo  inferior y superior del intervalo de confianza para el coeficiente respectivamente.\
+
+
+\
+
+<h4 style="color:blue">  Solución </h4>
+
+**Nota**: Con el fin de una implementación más clara, se han podido realizar algunas modificaciones con respecto a los requerimentos específicos del enunciado sobre como debe ser la arquitectura de las funciones. Sin embargo, el resultado proporcionado por las mismas, es exactamente el que pide el enunciado.
+
+Previamente se crean algunas funciones auxiliares que son necesarias. Para calcular el SE (error estándar), y para calcular el IC dado un nivel de confianza:
+
+```{r auxiliar functions}
+se<-function(x, B){
+  sqrt((1/(B-1) )*sum((x - mean(x))^2 ))
+}
+
+my.quantile <- function(x, nivel){
+  return(quantile(x, c(1-nivel, nivel)))
+}
+```
+
+Se crea una función para almacenar los datos con la forma requerida en el enunciado:
+
+```{r matrix_display}
+get.m <- function(datos, B, nivel){
+  matrix=matrix(nrow = dim(datos)[2], ncol = 3)
+  
+  confint <- apply(datos, 2, my.quantile, nivel)
+  
+  for(i in 1:dim(datos)[2]){
+    se <- se(datos[, i], B)
+    matrix[i, ] <- cbind(se, confint[1, i], confint[2, i])
+  }
+
+  colnames(matrix) <- c("SE", "5%", "95%")
+  rownames(matrix) <- c("Intercept", paste("x^", 1:(dim(datos)[2]-1), sep=""))
+
+  return(matrix)
+}
+```
+
+
+Método de Bootstrap ordinario haciendo uso de la función boot de R:
+```{r}
+library(boot)
+boot.fn.reg <- function(datos, indices){
+  model <- lm(datos$y~datos$x+I(datos$x^2), x=TRUE, y=TRUE, subset = indices)
+  return(coef(model))
+}
+
+bootstrap.original <- function(datos, reg, B, nivel){
+  datos <- boot(datos, reg, B)
+  return(get.m(datos$t, B, nivel))
+}
+```
+
+Implementación manual del método bootstrap ordinario:
+
+```{r}
+bootstrap.ordinario <- function(datos, ntimes, reg, formula){
+  n.sample <- length(datos$x)
+  formula <- as.formula(formula)
+  
+  row=matrix(nrow = ntimes, ncol = 3)
+
+  for(i in 1:ntimes){
+    indices <- sample(seq(1, n.sample), n.sample, replace=TRUE)
+    model.fit <- reg(formula = formula, data=datos, subset = indices)
+    coeficientes <- summary(model.fit)$coefficients
+    row[i, ] <- coeficientes[, "Estimate"]
+  }
+  return(row)
+}
+
+bootstrap.manual.f <- function(datos, ntimes, nivel, reg, formula){
+  coef <- bootstrap.ordinario(datos, ntimes, reg, formula)
+  matrix <- get.m(coef, ntimes, nivel)
+  return(matrix)
+}
+```
+
+Método de bootstrap con resampling residuals.
+
+```{r}
+coefficients.residuals <- function(datos, ntimes, reg, formula){
+  formula <- as.formula(formula)
+  model.fit <- reg(formula, data=datos)
+  residuos <- model.fit$residuals
+  y.hat <- model.fit$fitted.values
+  y.mat = matrix(NA, ntimes, dim(datos)[1])
+  
+  row=matrix(nrow = ntimes, ncol = 3)
+  
+  for (i in 1:ntimes){
+    epsilon = sample(residuos, dim(datos)[1], replace=TRUE)
+    y.mat[i,] = y.hat+epsilon
+    datos$y = y.mat[i,]
+    new.model <- reg(formula, data=datos)
+    coeficientes <- summary(new.model)$coefficients
+    se <- coeficientes[, "Estimate"]
+    row[i, ] <- se
+    
+  }
+  return(row)
+}
+
+bootstrap.residuals.f <- function(datos, ntimes, nivel, reg, formula){
+  coef <- coefficients.residuals(datos, ntimes, reg, formula)
+  matrix <- get.m(coef, ntimes, nivel)
+  return(matrix)
+}
+```
+
+Método de bootstrap con resampling cases.
+```{r}
+coefficients.cases <- function(datos, ntimes, reg, formula){
+  formula <- as.formula(formula)
+  index = sample(seq(1, dim(datos)[1]), dim(datos)[1], replace=TRUE)
+  D = datos[index,]
+  D.list = list(ntimes)
+  
+  row=matrix(nrow = ntimes, ncol = 3)
+  
+  for (i in 1:ntimes){
+    index = sample(seq(1, dim(datos)[1]), dim(datos)[1], replace=TRUE)
+    D.list[[i]] = D[index,]
+    
+    colnames(D.list[[i]]) <- c("y", "x")
+    
+    model.fit <- reg(formula, data=D.list[[i]])
+    coeficientes <- summary(model.fit)$coefficients
+    
+    row[i, ] <- coeficientes[, "Estimate"]
+  }
+  return(row)
+}
+
+bootstrap.cases.f <- function(datos, ntimes, nivel, reg, formula){
+  coef <- coefficients.cases(datos, ntimes, reg, formula)
+  matrix <- get.m(coef, ntimes, nivel)
+  return(matrix)
+}
+```
+
+Para los dos últimos métodos se ha usado como referencia el pdf llamado *Bootstrap_regression* del tema 2 y el libro *The Truth About Linear Regression*, donde vienen explicados los métodos. 
+
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 7.
+</h3>
+
+7. Utilizar la función definida en el ejercicio anterior para calcular con el método bootstrap:
+
+(a) El error estándar de las estimaciones por mínimos cuadrados de los coeficientes del modelo con término cuadrático de la práctica 1 de ordenador del tema 2 (Facturacion.txt). \
+
+<h4 style="color:blue">  Solución </h4>
+
+Se cargan los datos:
+
+```{r}
+dataset.facturacion <- read.table("Facturacion.txt",header=TRUE)
+names(dataset.facturacion)=c("y","x")
+```
+
+**Nota**: Se han hecho 10000 estimaciones bootstrap para cada tipo. Además, aunque no era necesario ni lo pedía el ejericio, he realizado adicionalmente el método de bootstrap ordinario (usando la función boot de R e implementándolo a mano) para ver sus resultados junto a los otros métodos. Otro aspecto reseñable es que, en lugar de llamar x al término lineal, lo he llamado como x¹ para facilitar su lectura, y asociarlo rápidamente como predictor del modelo, ya que he renombrado las columnas del fichero Facturacion.txt a **x** e **y** también se usará el término cuadrático x².
+\
+
+Se podría hacer una llamada a la función que realiza el método de bootstrap y usar su resultado (la matriz m x 3) tanto para el apartado (a) como el (b). \
+
+Bootstrap usando la función boot:
+```{R}
+set.seed(9)
+bootstrap.ordinario.boot <- bootstrap.original(dataset.facturacion, boot.fn.reg, 10000, 0.95)
+bootstrap.ordinario.boot[,1]
+```
+
+El error estándar usando la función boot de R, y haciendo 10000 estimaciones, es de 1.04310310, 0.59208978, 0.07367199 para el intercept, x¹ y x².\
+
+Bootstrap implementado manualmente:
+```{r}
+set.seed(9)
+bootstrap.ordinario.manual <- bootstrap.manual.f(dataset.facturacion, 10000, 0.95, lm, "y~x+I(x^2)")
+bootstrap.ordinario.manual[,1]
+```
+
+El error estándar para la versión ordinaria de bootstrap implementada a mano, y haciendo 10000 estimaciones, es de 1.05103579, 0.59681465, 0.07444696 para el intercept, x¹ y x².\
+
+Resampling residuals:
+
+```{r}
+set.seed(9)
+bootstrap.residual <- bootstrap.residuals.f(dataset.facturacion, 10000, 0.95, lm, "y~x+I(x^2)")
+bootstrap.residual[,1]
+```
+
+El error estándar para el método de bootstrap con resampling residuals, y haciendo 10000 estimaciones, es de 1.1053708, 0.6117653, 0.0743494 para el intercept, x¹ y x².\
+
+Resampling cases:
+
+```{r}
+set.seed(9)
+bootstrap.cases <- bootstrap.cases.f(dataset.facturacion, 10000, 0.95, lm, "y~x+I(x^2)")
+bootstrap.cases[, 1]
+```
+
+El error estándar para el método de bootstrap con resampling cases, y haciendo 10000 estimaciones, es de 1.12385610, 0.62448324, 0.07799587 para el intercept, x¹ y x².\
+
+(b) Intervalos de confianza de nivel 0.95 para los coeficientes del modelo con término cuadrático de la práctica 1 de ordenador del Tema 2. Comparar los resultados con los valores obtenidos en la práctica 1 de ordenador del Tema 2.\
+
+<h4 style="color:blue">  Solución </h4>
+
+Bootstrap usando la función boot:
+```{R}
+bootstrap.ordinario.boot[,-1]
+```
+
+Bootstrap implementado manualmente:
+```{R}
+bootstrap.ordinario.manual[,-1]
+```
+
+Resampling residuals:
+
+```{r}
+bootstrap.residual[,-1]
+```
+
+Resampling cases:
+
+```{r}
+bootstrap.cases[, -1]
+```
+
+Comparación:
+
+```{r}
+matriz.p1 <- matrix(nrow = 3, ncol = 3)
+matriz.p1[1, ] <- rbind(1.107, 298.677, 303.042)
+matriz.p1[2, ] <- rbind(0.611, 1.224, 3.634)
+matriz.p1[3, ] <- rbind(0.074, 1.429, 1.722)
+
+rownames(matriz.p1) <- c("Intercept", paste("x^", 1:(dim(matriz.p1)[2]-1), sep=""))
+colnames(matriz.p1) <- c("SE", "2.5%", "97.5%")
+
+knitr::kable(matriz.p1, caption="Tabla 1. Resultados Práctica 1 Tema 2.")
+```
+
+```{r}
+
+bootstrap.ordinario.manual.red <- round(bootstrap.ordinario.manual, digits=3)
+
+knitr::kable(bootstrap.ordinario.manual.red, caption="Tabla 2. Bootstrap ordinario.")
+```
+
+
+```{r}
+bootstrap.residual.red <- round(bootstrap.residual, digits=3)
+
+knitr::kable(bootstrap.residual.red, caption="Tabla 3. Bootstrap ordinario resampling residual.")
+```
+
+```{r}
+bootstrap.cases.red <- round(bootstrap.cases, digits=3)
+
+knitr::kable(bootstrap.cases.red, caption="Tabla 4. Bootstrap ordinario resampling cases.")
+```
+
+Para el método de bootstrap ordinario y bootstrap con resampling residual, el SE para el intercept es ligeramente inferior a la versión de la práctica 1 del tema 2. En cambio, el método de resampling cases presenta un SE levemente superior para el intercept. En cuanto al método de bootstrap ordinario, presenta un SE inferior para el término x¹, y un SE igual para el término x² con respecto al SE de la práctica 1 del tema 2. Sin embargo, el método de bootstrap residual presenta un SE para x¹ superior al método de bootstrap ordinario y la versión de la práctica 1 del tema 2, y un SE para el término x² exactamente igual a las dos versiones anteriores. Finalmente, el método de bootstrap con resampling cases, presenta un SE para x¹ y x² ligeramente superior a las versiones anteriores.\
+\
+En cuanto a los intervalos de confianza, puede observarse como la práctica 1 del Tema 2 presenta la mayor amplitud en los intervalos, con un IC al 97.5%. Dichos intervalos están centrados en 300.860, 2.429 y 1.575 respectivamente. En cambio, el método de bootstrap ordinario con un IC al 95% de confianza, está centrado en 300.846, 2.436 y 1.573. Por otro lado, el IC al 95% de confianza para el método de bootstrap con resampling residuals, está centrado en 300.860, 2.423, 1.577. Finalmente, el IC al 95% de confianza para bootstrap con resampling cases está centrado en 302.206, 1.544 y 1.691. Como ha podido observarse, el método de bootstrap ordinario y el de resampling residuals, están centrados en valores muy cercanos para cada término. Sin embargo, para resampling cases, los valores centrados del IC, para el intercept y el término x¹ están ligeramente alejados de las versiones anteriores.
+
+\
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 8: (5.4.9 ISL) página 223.
+</h3>
+
+9.We will now consider the Boston housing data set, from the ISLR2 library.
+
+(a) Based on this data set, provide an estimate for the population mean of medv. Call this estimate $\hat{μ}$.
+
+<h4 style="color:blue">  Solución </h4>
+
+Primero se carga la librería ISLR2. Anteriormente, se cargó la librería boot.
+```{r}
+library(ISLR2)
+```
+
+```{r}
+hat.mu <- mean(Boston$medv)
+hat.mu
+```
+
+(b) Provide an estimate of the standard error of $\hat{μ}$. Interpret this result.
+Hint: We can compute the standard error of the sample mean by dividing the sample standard deviation by the square root of the number of observations.\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+hat.se <- sd(Boston$medv)/sqrt(length(Boston$medv))
+hat.se
+```
+El error estándar de $\hat{μ}$ sería la desviación estándar de las diferentes muestras.\
+
+(c) Now estimate the standard error of $\hat{μ}$ using the bootstrap. How does this compare to your answer from (b)?\
+
+<h4 style="color:blue">  Solución </h4>
+
+Como en el ejemplo de la página 217 del libro *ISL*, voy a fijar el número de estimaciones de bootstrap en 1000.
+
+
+```{r}
+set.seed(9)
+
+boot.fn <- function(datos, indice){
+  return(mean(datos[indice]))
+}
+
+boot.ej9c <- boot(Boston$medv, boot.fn, R = 1000)
+
+boot.ej9c
+```
+El error estándar del apartado (b) es 0.4088611, frente al de este apartado que es 0.4196039. Como puede verse, el SE($\hat{μ}$) de este apartado es muy cercano.
+
+
+(d) Based on your bootstrap estimate from (c), provide a 95 % confidence interval for the mean of medv. Compare it to the results obtained using t.test(Boston$medv). \
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+intervalos <- c(boot.ej9c$t0 - 2*0.4196039, boot.ej9c$t0 + 2*0.4196039)
+intervalos
+```
+
+```{r}
+test <- t.test(Boston$medv)
+intervals_test <- test$conf.int[1:2]
+intervals_test
+```
+Ambos intervalos son muy similares, sin embargo, el intervalo para el bootstrap es ligeramente más amplio.\
+
+\
+
+
+(e) Based on this data set, provide an estimate, $\hat{μ}_{med}$, for the median value of medv in the population.\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+hat.median <- median(Boston$medv)
+hat.median
+```
+
+(f) We now would like to estimate the standard error of $\hat{μ}_{med}$. Unfortunately, there is no simple formula for computing the standard error of the median. Instead, estimate the standard error of the median using the bootstrap. Comment on your findings.\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+set.seed(9)
+
+boot.fn <- function(datos, indices){
+  return(median(datos[indices]))
+}
+
+boot.medianSE <- boot(Boston$medv, boot.fn, R=1000)
+boot.medianSE
+```
+Con bootstrap la mediana es de 21.2, al igual que con el apartado anterior. El error estándar es 0.3829068, el cual es bastante pequeño en comparación a la mediana.\
+
+\
+
+(g) Based on this data set, provide an estimate for the tenth percentile of medv in Boston census tracts. Call this quantity $\hat{μ}_{0.1}$.
+(You can use the quantile() function.)\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+hat.mu0.1 <- quantile(Boston$medv, probs=c(0.1))
+hat.mu0.1
+```
+
+(h) Use the bootstrap to estimate the standard error of $\hat{μ}_{0.1}$. Comment on your findings.\
+
+<h4 style="color:blue">  Solución </h4>
+
+```{r}
+set.seed(9)
+
+boot.fn <- function(datos, indices){
+  (quantile(datos[indices], probs=c(0.1)))
+}
+
+boot(Boston$medv, boot.fn, R=1000)
+```
+
+Como puede observarse, el valor es 12.75, como en el apartado (g). El SE($\hat{μ}_{0.1}$) es de 0.4937451, que es bastante bajo en comparación al valor del percentil.
+
+
+
+\
+\
+\
+
+<h3 style="color:red">
+Ejercicio 9.
+</h3>
+\
+9. Utilizando los datos del fichero Facturacion.txt de la práctica 1 de ordenador del Tema 2:\
+\
+(a) Realizar un análisis de regresión utilizando el método de los k vecinos más próximos, con k= 1, 5, 15, 50.\
+
+<h4 style="color:blue">  Solución </h4>
+
+Primero se cargan las librerías:
+
+```{r}
+library(caret)
+```
+
+A continuación, se cargan los datos: 
+
+```{r}
+datos.facturacion <- read.table("Facturacion.txt",header=TRUE)
+names(datos.facturacion)=c("y","x")
+x.lab = "Inversión I+D"
+y.lab = "Facturación"
+plot(y~x, data=datos.facturacion, xlab=x.lab, ylab=y.lab)
+```
+
+Regresión con k vecinos más cercanos
+
+```{r}
+reg.knn1 <- knnreg(y~x, data=datos.facturacion, k=1)
+reg.knn5 <- knnreg(y~x, data=datos.facturacion, k=5)
+reg.knn15 <- knnreg(y~x, data=datos.facturacion, k=15)
+reg.knn50 <- knnreg(y~x, data=datos.facturacion, k=50)
+```
+
+(b) Superponer a los datos las curvas de regresión estimadas y comentar las características de las curvas al variar de k. \
+
+<h4 style="color:blue">  Solución </h4>
+
+
+```{r}
+x.vec2=x=seq(0, 8,length=200)
+New.data=data.frame(x=x.vec2)
+
+par(mfrow=c(2, 2))
+plot(y~x,data=datos.facturacion, pch = 19,xlab=x.lab,ylab=y.lab,cex.lab=1.5,main="KNN 1")
+points(New.data$x, predict(reg.knn1, New.data),type="l",col="green",lwd=2)
+
+plot(y~x,data=datos.facturacion, pch = 19,xlab=x.lab,ylab=y.lab,cex.lab=1.5,main="KNN 5")
+points(New.data$x, predict(reg.knn5, New.data),type="l",col="red",lwd=2)
+
+plot(y~x,data=datos.facturacion, pch = 19,xlab=x.lab,ylab=y.lab,cex.lab=1.5,main="KNN 15")
+points(New.data$x, predict(reg.knn15, New.data),type="l",col="brown",lwd=2)
+
+plot(y~x,data=datos.facturacion, pch = 19,xlab=x.lab,ylab=y.lab,cex.lab=1.5,main="KNN 50")
+points(New.data$x, predict(reg.knn50, New.data),type="l",col="chocolate1",lwd=2)
+```
+\
+Para K = 1 parece que el modelo se ajusta casi a cada punto, ya que, usa la media del vecino más cercano. En cambio, para K = 5, aunque siguen habiendo bastantes oscilaciones, no es tan pronunciado como con K=1. Con K=15, el modelo todavía presenta menos oscilaciones que con los anteriores, y al usar las medias de los 15 vecinos más cercanos, presentará menos varianza que con los K anteriores. Finalmente con K=50, el modelo parece más robusto que los anteriores, ya que, para seleccionar el siguiente punto tendrá un conjunto de datos mucho mayor que para los anteriores K. Por tanto, cuanto menor es el valor de K (vecinos), el modelo más se ajustará a los puntos del conjunto de datos con los que se haya entrenado, y en consecuencia, presentará una mayor varianza.
+
+
+(c) Predecir la facturación media anual de una empresa tecnológica de gran tamaño cuya inversión media anual en I+D es de 6 millones de euros utilizando los 4 modelos estimados en (a). \
+
+<h4 style="color:blue">  Solución </h4>
+
+
+```{r}
+predict(reg.knn1, data.frame(x=c(6)))
+predict(reg.knn5, data.frame(x=c(6)))
+predict(reg.knn15, data.frame(x=c(6)))
+predict(reg.knn50, data.frame(x=c(6)))
+```
+```{r}
+K <- c(1, 5, 15, 50)
+predicciones <- c(predict(reg.knn1, data.frame(x=c(6))),
+                  predict(reg.knn5, data.frame(x=c(6))),
+                  predict(reg.knn15, data.frame(x=c(6))),
+                  predict(reg.knn50, data.frame(x=c(6))))
+
+resultados <- data.frame(K, predicciones)
+
+knitr::kable(resultados, caption="Tabla 5. Predicciones con los K vecinos para una inversión media anual en I+D de 6 millones de euros.")
+```
+
+<h3 style="color:red">
+Ejercicio 10.
+</h3>
+
+
+\
+10. Calcular el error de entrenamiento y el error de generalización de los cuatro modelos estimados en el ejercicio 9. \
+
+<h4 style="color:blue">  Solución </h4>
+
+Como menciona la parte 3 de la práctica 1 del tema 2:
+
+Los datos de este ejemplo han sido generado del siguiente modelo:
+
+$y= \beta_{0} +\beta_{1}x + \beta_{2} x^{2} + \epsilon$
+
+donde
+
+- $\beta_{0}$=300
+- $\beta_{1}$=3
+- $\beta_{2}$=1.5
+- $X \sim Unif(1,7)$
+- $\epsilon \sim N(0,3)$
+
+\
+\
+
+La línea de regresión:
+
+```{r}
+True.reg <- function(x){
+  return(300+(3*x)+(1.5*x^2) )
+}
+
+x.vec = seq(0, 8,length=200)
+
+plot(y~x, data=datos.facturacion, xlab=x.lab, ylab=y.lab)
+points(x.vec, True.reg(x.vec), type="l", col="red", lwd=2, cex=1.5)
+```
+
+Se ajusta el modelo a los datos de entrenamiento.
+
+```{r}
+reg.knn1 <- knnreg(y~x, data=datos.facturacion, k=1)
+reg.knn5 <- knnreg(y~x, data=datos.facturacion, k=5)
+reg.knn15 <- knnreg(y~x, data=datos.facturacion, k=15)
+reg.knn50 <- knnreg(y~x, data=datos.facturacion, k=50)
+```
+
+Se calcula su error:
+
+```{r}
+Err.train.reg.1kNN = mean( (datos.facturacion$y -predict(reg.knn1, datos.facturacion) )^2)
+Err.train.reg.5kNN = mean( (datos.facturacion$y -predict(reg.knn5, datos.facturacion) )^2)
+Err.train.reg.15kNN = mean( (datos.facturacion$y -predict(reg.knn15, datos.facturacion) )^2)
+Err.train.reg.50kNN = mean( (datos.facturacion$y -predict(reg.knn50, datos.facturacion) )^2)
+
+errores.knn.train <- c(Err.train.reg.1kNN, Err.train.reg.5kNN, Err.train.reg.15kNN, Err.train.reg.50kNN)
+```
+
+
+```{r}
+k.vec=c(1,5,15,50)
+plot(1/k.vec, errores.knn.train, type="b",lwd=2,ann=FALSE,cex.lab=1.5,col="blue",xaxt='n')
+axis(side = 1, at=c(0.02,0.1,0.2,1))
+mtext(side = 1, text = "1/k", line = 3,cex=1.2)
+mtext(side = 2, text =expression("Err"[train]), line = 1.8,cex=1.2)
+```
+
+Para el test, se genera un conjunto de datos mediante el modelo verdadero, el cual se definió en el ejercicio anterior:
+
+```{r}
+N.pop=10^6
+
+X.pop=data.frame(x=runif(N.pop,1, 7))
+True.reg.Pop=True.reg(X.pop)[,1]
+Y.pop=True.reg.Pop+rnorm(N.pop,0,3)
+```
+
+
+```{r}
+Err.Irreducible=mean( (Y.pop-True.reg.Pop)^2 )
+
+Err.test.reg.1kNN = mean( (Y.pop -predict(reg.knn1, X.pop) )^2)
+Err.test.reg.5kNN = mean( (Y.pop -predict(reg.knn5, X.pop) )^2)
+Err.test.reg.15kNN = mean( (Y.pop -predict(reg.knn15, X.pop) )^2)
+Err.test.reg.50kNN = mean( (Y.pop -predict(reg.knn50, X.pop) )^2)
+
+errores.knn.test <- c(Err.test.reg.1kNN, Err.test.reg.5kNN, Err.test.reg.15kNN, Err.test.reg.50kNN)
+```
+
+
+Al poner que el segundo punto del eje x sea 0.067, no se ha muestrado dado su cercanía con 0.01, por ello, se ha puesto a 0.1.
+```{r}
+k.vec=c(1,5,15,50)
+plot(1/k.vec, errores.knn.train, type="b",lwd=2,ann=FALSE,cex.lab=1.5,col="red",xaxt='n')
+axis(side = 1, at=c(0.01, 0.1, 0.2, 1.0))
+mtext(side = 1, text = "1/k", line = 3,cex=1.2)
+mtext(side = 2, text =expression("Err"), line = 1.8,cex=1.2)
+abline(c(Err.Irreducible,0),lty=2,lwd=2,col="black")
+points(1/k.vec, errores.knn.test,type="b",lwd=2,col="pink")
+
+legend("topright",c("Err.train","Err.test"), col=c("red","pink"), lwd=2,cex=1.3)
+```
+
+En la gráfica puede observarse como, a medida que el número de vecinos es menor, el error de entrenamiento también lo es, ya que el modelo se ajusta a cada punto. Sin embargo, con el error de generalización, ocurre que, aunque para 50 vecinos es inferior al de entrenamiento, sigue siendo elevado en comparación a los otros modelos que usan un menor número de vecinos. Con el modelo de 5 vecinos el error de generalización es inferior que el error del resto de modelos. A partir de ahí, al disminuir el número de vecinos, el error de generalización aumentará, ya que, el modelo se ajustará más a los puntos con los que ha sido entrenado. Esto es conocido como sobreajuste, ya que, cuanto más flexible es un modelo, más se ajusta a los datos de entrenamiento, y mayor será, por tanto, el error de generalización.
+
+```{r}
+resultados.10 <- data.frame(k.vec, errores.knn.train, errores.knn.test)
+
+colnames(resultados.10) <- c("K vecinos", "error entrenamiento", "error generalización")
+
+knitr::kable(resultados.10, caption="Tabla 6. Error de generalización para los conjuntos de train y test.")
+```
+
+Aquí se evidencia como para 1 vecino el modelo se ajusta a cada punto. Produciendo un error de entrenamiento de 0. A medida que el número de vecinos se incrementa, también lo hará el error de entrenamiento. En cambio, para la generalización, aparece la famosa forma de "U", donde, el error es alto para un modelo inicial poco flexible, pero al aumentar la flexibilidad del modelo, el error desciende hasta cierto punto (el mínimo en k = 5) y a partir de ahí, comienza a aumentar nuevamente.
